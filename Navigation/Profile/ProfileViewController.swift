@@ -19,7 +19,7 @@ class ProfileViewController: UIViewController {
     }()
     
     @objc private func pressButtonSetTitle() {
-        var profileName = profileHeaderView.nameLabel.text
+        let profileName = profileHeaderView.nameLabel.text
         if title == profileName {
             title = "Profile"
         } else {
