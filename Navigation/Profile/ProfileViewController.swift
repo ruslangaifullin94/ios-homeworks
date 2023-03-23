@@ -9,39 +9,43 @@ import UIKit
 
 class ProfileViewController: UIViewController {
    
-    private let titleButton: UIButton = {
-       let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Cменить Title", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(pressButtonSetTitle), for: .touchUpInside)
-        return button
+    fileprivate let data = Post.make()
+    
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView.init(frame: .zero, style: .plain)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
     }()
     
-    @objc private func pressButtonSetTitle() {
-        let profileName = profileHeaderView.nameLabel.text
-        if title == profileName {
-            title = "Profile"
-        } else {
-            title = profileName
-        }
+    private enum CellReuseID: String {
+        case base = "BaseTableViewCell_ReuseID"
+        case custom = "CustomTableViewCell_ReuseID"
     }
+    
+    private enum HeaderFooterReuseID: String {
+        case base = "TableSectionFooterHeaderView_ReuseID"
+    }
+    
+    
     
     var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
-     //   headerView.backgroundColor = .systemRed
+        headerView.backgroundColor = .systemGray3
         return headerView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Profile"
-        view.backgroundColor = .systemGray
-        view.addSubview(profileHeaderView)
-        view.addSubview(titleButton)
+        view.backgroundColor = .systemBackground
+//        title = "Profile"
+        addSubviews()
         setupView()
         
+    }
+    private func addSubviews(){
+        view.addSubview(profileHeaderView)
+        view.addSubview(tableView)
     }
     private func setupView() {
         let safeAreaGuide = view.safeAreaLayoutGuide
@@ -51,11 +55,38 @@ class ProfileViewController: UIViewController {
             profileHeaderView.rightAnchor.constraint(equalTo: safeAreaGuide.rightAnchor, constant: 0),
             profileHeaderView.heightAnchor.constraint(equalToConstant: 220),
             
-            titleButton.leftAnchor.constraint(equalTo: safeAreaGuide.leftAnchor, constant: 0),
-            titleButton.rightAnchor.constraint(equalTo: safeAreaGuide.rightAnchor, constant: 0),
-            titleButton.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: profileHeaderView.bottomAnchor, constant: 0),
+            tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
         ])
     }
     
+    private func tuneTableView() {
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 44.0
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0.0
+        }
+        tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
+    }
+    
+}
 
+extension ProfileViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.base.rawValue, for: indexPath) as? BaseTableViewCell else {
+            fatalError("could not dequeueReusableCell")
+        }
+        
+        cell.update(data[indexPath.row])
+        
+        return cell
+    }
+    
+    
 }
