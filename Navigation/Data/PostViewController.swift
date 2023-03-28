@@ -16,7 +16,7 @@ class PostViewController: UIViewController {
     func update(model: Post) {
         data = model
         
-        navigationItem.title = model.author
+       // navigationItem.title = model.author
         
     }
     

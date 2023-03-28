@@ -58,8 +58,6 @@ class LogInViewController: UIViewController {
         return login
     }()
     
-    
-    
     private lazy var password: UITextField = {
         let password  = UITextField()
         password.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +79,6 @@ class LogInViewController: UIViewController {
         password.isSecureTextEntry = true
         password.tag = 1
         password.delegate = self
-        
         return password
     }()
     

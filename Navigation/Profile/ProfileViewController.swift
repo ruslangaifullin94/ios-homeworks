@@ -9,11 +9,14 @@ import UIKit
 
 class ProfileViewController: UIViewController {
    
+    //MARK: - Properties
+    
     fileprivate let data = Post.make()
     
     private lazy var tableView: UITableView = {
-        let tableView = UITableView.init(frame: .zero, style: .plain)
+        let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.sectionHeaderHeight = 220
         return tableView
     }()
     
@@ -26,8 +29,6 @@ class ProfileViewController: UIViewController {
         case base = "TableSectionFooterHeaderView_ReuseID"
     }
     
-    
-    
     var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,27 +36,25 @@ class ProfileViewController: UIViewController {
         return headerView
     }()
     
+    //MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-//        title = "Profile"
         addSubviews()
         setupView()
         tuneTableView()
     }
+    
+    //MARK: - Metods
+    
     private func addSubviews(){
-        view.addSubview(profileHeaderView)
         view.addSubview(tableView)
     }
     private func setupView() {
+        view.backgroundColor = .systemBackground
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            profileHeaderView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
-            profileHeaderView.leftAnchor.constraint(equalTo: safeAreaGuide.leftAnchor, constant: 0),
-            profileHeaderView.rightAnchor.constraint(equalTo: safeAreaGuide.rightAnchor, constant: 0),
-            profileHeaderView.heightAnchor.constraint(equalToConstant: 220),
-            
-            tableView.topAnchor.constraint(equalTo: profileHeaderView.bottomAnchor, constant: 0),
+            tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 0),
             tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
@@ -68,31 +67,43 @@ class ProfileViewController: UIViewController {
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0.0
         }
-        tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
-        tableView.backgroundColor = .systemRed
+//        tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderFooterReuseID.base.rawValue)
+//        tableView.setAndLayout(headerView: profileHeaderView)
+        tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: HeaderFooterReuseID.base.rawValue)
+        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
         tableView.delegate = self
         tableView.dataSource = self
     }
     
 }
 
+//MARK: Extensions
+
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+            UITableView.automaticDimension
+        }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.base.rawValue, for: indexPath) as? BaseTableViewCell else {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderFooterReuseID.base.rawValue) as? ProfileHeaderView else {
             fatalError("could not dequeueReusableCell")
         }
-        
-        cell.update(data[indexPath.row])
-        
-        return cell
+//        headerView.backgroundColor = .systemRed
+
+        return headerView
     }
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 500
-//    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.base.rawValue, for: indexPath) as? PostTableViewCell else {
+            fatalError("could not dequeueReusableCell")
+        }
+        cell.update(data[indexPath.row])
+        return cell
+    }
+
 }

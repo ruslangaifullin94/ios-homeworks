@@ -7,7 +7,10 @@
 
 import UIKit
 
-final class ProfileHeaderView: UIView {
+final class ProfileHeaderView: UITableViewHeaderFooterView {
+    
+    //MARK: - Properties
+    
     private var statusText: String = ""
     private let setProfileAvatar: UIImageView = {
         let profileAvatar = UIImageView()
@@ -19,7 +22,7 @@ final class ProfileHeaderView: UIView {
         profileAvatar.translatesAutoresizingMaskIntoConstraints = false
         return profileAvatar
     }()
-     public let nameLabel: UILabel = {
+    public let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Cat Lucy"
         label.font = .systemFont(ofSize: 18, weight: .bold)
@@ -35,7 +38,7 @@ final class ProfileHeaderView: UIView {
         label.textColor = .gray
         return label
     }()
-    private let enterStatus: UITextField = {
+    private lazy var enterStatus: UITextField = {
         let text = UITextField()
         text.backgroundColor = .white
         text.font = .systemFont(ofSize: 15, weight: .regular)
@@ -47,6 +50,10 @@ final class ProfileHeaderView: UIView {
         text.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: text.frame.height))
         text.leftViewMode = .always
         text.addTarget(self, action: #selector(setStatus(_:)), for: .editingChanged)
+        text.keyboardType = .default
+        text.autocorrectionType = .no
+        text.returnKeyType = .done
+        text.delegate = self
         return text
     }()
     private let statusButton: UIButton = {
@@ -64,15 +71,24 @@ final class ProfileHeaderView: UIView {
         return button
     }()
     
+    //MARK: - Metods
+    
+    private func didTapSetButton() {
+        self.endEditing(true)
+        statusLabel.text = statusText
+        enterStatus.text = nil
+        enterStatus.placeholder = statusLabel.text
+    }
     
     @objc private func setStatus(_ textField: UITextField) {
         statusText = textField.text!
     }
-   @objc private func pressButton() {
-       statusLabel.text = statusText
+    
+    @objc private func pressButton() {
+        didTapSetButton()
     }
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         setupUI()
     }
     
@@ -91,10 +107,10 @@ final class ProfileHeaderView: UIView {
             setProfileAvatar.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
             setProfileAvatar.widthAnchor.constraint(equalToConstant: 120),
             setProfileAvatar.heightAnchor.constraint(equalToConstant: 120),
-       
+            
             nameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 27),
-        
+            
             
             statusLabel.bottomAnchor.constraint(equalTo: enterStatus.topAnchor, constant: -10),
             statusLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: 0),
@@ -110,8 +126,17 @@ final class ProfileHeaderView: UIView {
             enterStatus.leftAnchor.constraint(equalTo: nameLabel.leftAnchor, constant: 0),
             enterStatus.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16)
         ])
-       
+        
     }
-    
+}
 
+//MARK: - Extensions
+
+extension ProfileHeaderView: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            
+            didTapSetButton()
+        return true
+    }
 }

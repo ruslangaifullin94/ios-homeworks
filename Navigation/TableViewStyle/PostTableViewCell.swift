@@ -7,7 +7,9 @@
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell {
+class PostTableViewCell: UITableViewCell {
+    
+    //MARK: - Properties of Cells
     
     private let authorLabel: UILabel = {
         let label = UILabel()
@@ -52,6 +54,7 @@ class BaseTableViewCell: UITableViewCell {
         return description
     }()
     
+    //MARK: - Settings for Cells
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
@@ -80,18 +83,15 @@ class BaseTableViewCell: UITableViewCell {
             authorLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             authorLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             authorLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-//            authorLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 16),
             
             picOfPost.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
             picOfPost.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
-            picOfPost.centerYAnchor.constraint(equalTo: centerYAnchor),
+            picOfPost.heightAnchor.constraint(equalToConstant: frame.size.width),
             picOfPost.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 16),
             
             descriptionText.topAnchor.constraint(equalTo: picOfPost.bottomAnchor, constant: 16),
             descriptionText.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             descriptionText.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-//            descriptionText.heightAnchor.constraint(equalToConstant: view.window?.screen)
-//            descriptionText.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
             
             likeLabel.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: 16),
             likeLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
@@ -102,10 +102,7 @@ class BaseTableViewCell: UITableViewCell {
             viewsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
             
         ])
-       // contentView.backgroundColor = .systemBackground
         
-       // accessoryView = nil
-       // accessoryType = .disclosureIndicator
     }
     
     func update (_ model: Post) {
