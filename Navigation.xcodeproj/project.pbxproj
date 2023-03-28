@@ -74,7 +74,6 @@
 				5A3902CA29B762D8005751E3 /* AppDelegate.swift */,
 				5A3902EA29B7A623005751E3 /* InfoViewController.swift */,
 				5A3902CC29B762D8005751E3 /* SceneDelegate.swift */,
-				5A3902E629B781BA005751E3 /* PostViewController.swift */,
 				5A3902E029B777A2005751E3 /* FeedViewController.swift */,
 				5A3902D329B762DA005751E3 /* Assets.xcassets */,
 				5A3902D529B762DA005751E3 /* LaunchScreen.storyboard */,
@@ -96,6 +95,7 @@
 		5A3902F029BE6706005751E3 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				5A3902E629B781BA005751E3 /* PostViewController.swift */,
 				5A3902E829B79B1F005751E3 /* Post.swift */,
 			);
 			path = Data;

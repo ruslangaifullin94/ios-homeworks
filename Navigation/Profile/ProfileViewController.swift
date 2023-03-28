@@ -41,7 +41,7 @@ class ProfileViewController: UIViewController {
 //        title = "Profile"
         addSubviews()
         setupView()
-        
+        tuneTableView()
     }
     private func addSubviews(){
         view.addSubview(profileHeaderView)
@@ -69,11 +69,14 @@ class ProfileViewController: UIViewController {
             tableView.sectionHeaderTopPadding = 0.0
         }
         tableView.register(BaseTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
+        tableView.backgroundColor = .systemRed
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
 }
 
-extension ProfileViewController: UITableViewDataSource {
+extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data.count
     }
@@ -88,5 +91,8 @@ extension ProfileViewController: UITableViewDataSource {
         return cell
     }
     
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 500
+//    }
     
 }

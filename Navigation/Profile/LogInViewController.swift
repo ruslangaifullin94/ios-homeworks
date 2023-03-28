@@ -11,6 +11,9 @@ class LogInViewController: UIViewController {
     
     // MARK: - Properties
     
+    private let loginData = "test"
+    private let passData = "123"
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.showsVerticalScrollIndicator = true
@@ -32,7 +35,7 @@ class LogInViewController: UIViewController {
         return logo
     }()
     
-    private lazy var login: UITextField = { [unowned self] in
+    private lazy var login: UITextField = {
         let login  = UITextField()
         login.translatesAutoresizingMaskIntoConstraints = false
         login.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: login.frame.height))
@@ -50,12 +53,14 @@ class LogInViewController: UIViewController {
         login.keyboardType = .default
         login.autocorrectionType = .no
         login.returnKeyType = .continue
-        
+        login.tag = 0
         login.delegate = self
         return login
     }()
     
-    private lazy var password: UITextField = { [unowned self] in
+    
+    
+    private lazy var password: UITextField = {
         let password  = UITextField()
         password.translatesAutoresizingMaskIntoConstraints = false
         password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
@@ -74,7 +79,7 @@ class LogInViewController: UIViewController {
         password.autocorrectionType = .no
         password.returnKeyType = .done
         password.isSecureTextEntry = true
-        
+        password.tag = 1
         password.delegate = self
         
         return password
@@ -141,12 +146,15 @@ class LogInViewController: UIViewController {
         scrollView.contentOffset = CGPoint(x: 0, y: 0)
         }
     @objc private func logIn() {
-      
-        if login.isSelected {
-            login.alpha = 0.8
-        } else if login.isHighlighted {
-            login.alpha = 0.8
-        }
+//        if (login.text == loginData) && (password.text == passData) {
+//            if login.isSelected {
+//                login.alpha = 0.8
+//            } else if login.isHighlighted {
+//                login.alpha = 0.8
+//            }
+//            let profileViewController = ProfileViewController()
+//            self.navigationController?.pushViewController(profileViewController, animated: true)
+//        }
         let profileViewController = ProfileViewController()
         self.navigationController?.pushViewController(profileViewController, animated: true)
     }
@@ -217,9 +225,12 @@ class LogInViewController: UIViewController {
 extension LogInViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        textField.resignFirstResponder()
-        
+        if textField.tag == 0 {
+            password.becomeFirstResponder()
+        } else {
+            self.view.endEditing(true)
+            logIn()
+        }
         return true
     }
 }

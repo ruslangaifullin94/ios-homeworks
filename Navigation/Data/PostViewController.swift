@@ -8,6 +8,19 @@
 import UIKit
 
 class PostViewController: UIViewController {
+    
+    
+    private var data: Post? = nil
+    
+    
+    func update(model: Post) {
+        data = model
+        
+        navigationItem.title = model.author
+        
+    }
+    
+    
 //    var post = Post(title: "Новенький пост")
 //
 //    private func settingView() {
