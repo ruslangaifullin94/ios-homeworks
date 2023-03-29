@@ -22,6 +22,7 @@ class FeedViewController: UIViewController {
     
     private lazy var actionButtonTwo: UIButton = {
         let button = UIButton()
+        
                button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 15

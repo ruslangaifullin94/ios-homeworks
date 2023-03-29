@@ -6,6 +6,9 @@
 //
 
 import UIKit
+protocol ProfileViewControllerDelegate: AnyObject {
+    func presentAlert()
+}
 
 class ProfileViewController: UIViewController {
    
@@ -31,8 +34,8 @@ class ProfileViewController: UIViewController {
     
     var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.backgroundColor = .systemGray3
+//        headerView.translatesAutoresizingMaskIntoConstraints = false
+//        headerView.backgroundColor = .systemGray3
         return headerView
     }()
     
@@ -92,8 +95,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderFooterReuseID.base.rawValue) as? ProfileHeaderView else {
             fatalError("could not dequeueReusableCell")
         }
-//        headerView.backgroundColor = .systemRed
-
+        headerView.delegate = self
         return headerView
     }
     
@@ -106,4 +108,30 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
+}
+extension ProfileViewController: ProfileViewControllerDelegate {
+    func presentAlert() {
+        let optionMenu = UIAlertController(title: nil, message: "Profile photo", preferredStyle: .actionSheet)
+
+            let openAction = UIAlertAction(title: "Открыть фото", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                print("Saved")
+            })
+
+            let closeAction = UIAlertAction(title: "Загрузить новое фото", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                print("Deleted")
+            })
+
+            let cancelAction = UIAlertAction(title: "Закрыть", style: .cancel, handler: {
+                (alert: UIAlertAction!) -> Void in
+                print("Cancelled")
+            })
+            optionMenu.addAction(openAction)
+            optionMenu.addAction(closeAction)
+            optionMenu.addAction(cancelAction)
+        self.navigationController?.present(optionMenu, animated: true)
+    }
+    
+    
 }

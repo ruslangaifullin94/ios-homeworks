@@ -10,7 +10,7 @@ import UIKit
 final class ProfileHeaderView: UITableViewHeaderFooterView {
     
     //MARK: - Properties
-    
+    weak var delegate: ProfileViewControllerDelegate?
     private var statusText: String = ""
     private let setProfileAvatar: UIImageView = {
         let profileAvatar = UIImageView()
@@ -19,6 +19,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         profileAvatar.layer.cornerRadius = 60
         profileAvatar.clipsToBounds = true
         profileAvatar.layer.borderColor = .init(red: 1, green: 1, blue: 1, alpha: 1)
+        profileAvatar.isUserInteractionEnabled = true
         profileAvatar.translatesAutoresizingMaskIntoConstraints = false
         return profileAvatar
     }()
@@ -73,6 +74,17 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     
     //MARK: - Metods
     
+    private func setupGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapPhotoAlert))
+        tapGesture.numberOfTapsRequired = 1
+        setProfileAvatar.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func didTapPhotoAlert() {
+        print("tap complete")
+        delegate?.presentAlert()
+    }
+    
     private func didTapSetButton() {
         self.endEditing(true)
         statusLabel.text = statusText
@@ -87,9 +99,11 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     @objc private func pressButton() {
         didTapSetButton()
     }
+    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupGestureRecognizer()
     }
     
     required init?(coder: NSCoder) {
@@ -140,3 +154,4 @@ extension ProfileHeaderView: UITextFieldDelegate {
         return true
     }
 }
+
