@@ -57,7 +57,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         text.delegate = self
         return text
     }()
-    private let statusButton: UIButton = {
+    private lazy var statusButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemBlue
@@ -149,9 +149,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
 extension ProfileHeaderView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            
             didTapSetButton()
         return true
     }
 }
-

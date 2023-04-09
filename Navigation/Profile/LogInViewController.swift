@@ -82,7 +82,7 @@ class LogInViewController: UIViewController {
         return password
     }()
     
-    private let logInButton: UIButton = {
+    private lazy var logInButton: UIButton = {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Log In", for: .normal)

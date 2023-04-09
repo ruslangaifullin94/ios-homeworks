@@ -16,36 +16,31 @@ class ProfileViewController: UIViewController {
     
     fileprivate let data = Post.make()
     
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.sectionHeaderHeight = 220
+        
         return tableView
     }()
     
-    private enum CellReuseID: String {
-        case base = "BaseTableViewCell_ReuseID"
-        case custom = "CustomTableViewCell_ReuseID"
-    }
-    
-    private enum HeaderFooterReuseID: String {
-        case base = "TableSectionFooterHeaderView_ReuseID"
-    }
-    
-    var profileHeaderView: ProfileHeaderView  = {
+   private lazy var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
-//        headerView.translatesAutoresizingMaskIntoConstraints = false
-//        headerView.backgroundColor = .systemGray3
-        return headerView
+        headerView.delegate = self
+       return headerView
     }()
     
     //MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.isNavigationBarHidden = true
         addSubviews()
         setupView()
         tuneTableView()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
     }
     
     //MARK: - Metods
@@ -53,6 +48,7 @@ class ProfileViewController: UIViewController {
     private func addSubviews(){
         view.addSubview(tableView)
     }
+    
     private func setupView() {
         view.backgroundColor = .systemBackground
         let safeAreaGuide = view.safeAreaLayoutGuide
@@ -70,12 +66,12 @@ class ProfileViewController: UIViewController {
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0.0
         }
-//        tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderFooterReuseID.base.rawValue)
-//        tableView.setAndLayout(headerView: profileHeaderView)
-        tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: HeaderFooterReuseID.base.rawValue)
-        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
+
+        tableView.setAndLayout(headerView: profileHeaderView)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: CellReuseID.photo.rawValue)
+        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
     }
     
 }
@@ -83,34 +79,57 @@ class ProfileViewController: UIViewController {
 //MARK: Extensions
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-            UITableView.automaticDimension
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 180
+        } else {
+            return UITableView.automaticDimension
         }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderFooterReuseID.base.rawValue) as? ProfileHeaderView else {
-            fatalError("could not dequeueReusableCell")
+    func numberOfSections(in tableView: UITableView) -> Int {
+        2
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        } else {
+            return data.count
         }
-        headerView.delegate = self
-        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        if indexPath.section == 0 {
+            let photosViewController = PhotosViewController()
+            photosViewController.title = "Profile Photo"
+            self.navigationController?.pushViewController(photosViewController, animated: true)
+        }
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.base.rawValue, for: indexPath) as? PostTableViewCell else {
-            fatalError("could not dequeueReusableCell")
+        if indexPath.section == 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.photo.rawValue) as? PhotoTableViewCell else {
+                fatalError("could not dequeueReusableCell")
+            }
+
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.base.rawValue, for: indexPath) as? PostTableViewCell else {
+                fatalError("could not dequeueReusableCell")
+            }
+            cell.update(data[indexPath.row])
+            return cell
         }
-        cell.update(data[indexPath.row])
-        return cell
     }
 
 }
 extension ProfileViewController: ProfileViewControllerDelegate {
     func presentAlert() {
+        print("i work")
         let optionMenu = UIAlertController(title: nil, message: "Profile photo", preferredStyle: .actionSheet)
 
             let openAction = UIAlertAction(title: "Открыть фото", style: .default, handler: {
