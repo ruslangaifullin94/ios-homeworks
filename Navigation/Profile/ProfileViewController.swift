@@ -7,7 +7,10 @@
 
 import UIKit
 protocol ProfileViewControllerDelegate: AnyObject {
-    func presentAlert()
+    func presentAlert(image: UIImageView)
+    func openPhoto(image: UIImageView)
+    func savePoint(image: UIImageView) -> CGPoint
+    func closePhoto(image: UIImageView, point: CGPoint)
 }
 
 class ProfileViewController: UIViewController {
@@ -16,12 +19,34 @@ class ProfileViewController: UIViewController {
     
     fileprivate let data = Post.make()
     
+    private var pointOnPhoto: CGPoint?
+    private var profileAvatar: UIImageView?
+  
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         return tableView
+    }()
+    
+    private lazy var backgroundPhotoView: UIView = {
+        let photoView = UIView()
+        photoView.translatesAutoresizingMaskIntoConstraints = false
+        photoView.alpha = 0
+        photoView.backgroundColor = .black
+        photoView.isHidden = false
+        return photoView
+    }()
+    
+    private lazy var closePhotoButton: UIButton = {
+       let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.isHidden = true
+        button.alpha = 0
+        button.addTarget(self, action: #selector(cancelAnimation), for: .touchUpInside)
+        return button
     }()
     
    private lazy var profileHeaderView: ProfileHeaderView  = {
@@ -35,10 +60,15 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
+       
+    }
+    
+    override func viewWillLayoutSubviews() {
         addSubviews()
         setupView()
         tuneTableView()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
     }
@@ -47,6 +77,8 @@ class ProfileViewController: UIViewController {
     
     private func addSubviews(){
         view.addSubview(tableView)
+        view.addSubview(backgroundPhotoView)
+        view.addSubview(closePhotoButton)
     }
     
     private func setupView() {
@@ -56,7 +88,16 @@ class ProfileViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 0),
             tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
+            
+            backgroundPhotoView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundPhotoView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            backgroundPhotoView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            backgroundPhotoView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            closePhotoButton.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 10),
+            closePhotoButton.rightAnchor.constraint(equalTo: safeAreaGuide.rightAnchor, constant: -10)
+
         ])
     }
     
@@ -73,6 +114,13 @@ class ProfileViewController: UIViewController {
         tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: CellReuseID.photo.rawValue)
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
     }
+    
+    
+    
+    @objc private func cancelAnimation() {
+        closePhoto(image: profileAvatar!, point: pointOnPhoto!)
+    }
+    
     
 }
 
@@ -128,13 +176,20 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
 }
 extension ProfileViewController: ProfileViewControllerDelegate {
-    func presentAlert() {
+   
+    
+    func presentAlert(image: UIImageView) {
         print("i work")
         let optionMenu = UIAlertController(title: nil, message: "Profile photo", preferredStyle: .actionSheet)
 
-            let openAction = UIAlertAction(title: "Открыть фото", style: .default, handler: {
+        let openAction = UIAlertAction(title: "Открыть фото", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
-                print("Saved")
+            guard let header = self.tableView.tableHeaderView as? ProfileHeaderView else {return}
+            header.animatePhoto(image: image)
+//            animatePhoto
+//            self.openPhoto(image: image)
+                
+                print("Open photo")
             })
 
             let closeAction = UIAlertAction(title: "Загрузить новое фото", style: .default, handler: {
@@ -150,6 +205,74 @@ extension ProfileViewController: ProfileViewControllerDelegate {
             optionMenu.addAction(closeAction)
             optionMenu.addAction(cancelAction)
         self.navigationController?.present(optionMenu, animated: true)
+    }
+    
+    func savePoint(image: UIImageView) -> CGPoint {
+        let point = image.center.self
+        return point
+    }
+    
+    
+    
+    func openPhoto(image: UIImageView) {
+        pointOnPhoto = savePoint(image: image)
+        profileAvatar = image
+        let screen = UIScreen.main.bounds.width / image.bounds.width
+        UIView.animateKeyframes(
+            withDuration: 1.5,
+            delay: 0.1,
+            options: .calculationModeLinear,
+            animations: {
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5)
+                {
+                    
+                    image.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
+                    image.transform = CGAffineTransform(scaleX: screen, y: screen)
+                    
+                    self.backgroundPhotoView.alpha = 0.5
+                    
+                }
+                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3)
+                {
+                    self.closePhotoButton.alpha = 1
+                    image.layer.cornerRadius = 0.0
+                    image.layer.borderWidth = 0
+                    self.closePhotoButton.isHidden = false
+                }
+            
+            },
+            completion: {_ in
+                self.navigationController?.tabBarController?.tabBar.isHidden = true
+//                self.profileAvatar!.center = CGPoint(x: self.backgroundPhotoView.bounds.midX, y: self.backgroundPhotoView.bounds.midY)
+//
+////                self.backgroundPhotoView.addSubview(self.profileAvatar)
+            }
+        )
+    }
+    func closePhoto(image: UIImageView, point: CGPoint) {
+        UIView.animateKeyframes(
+            withDuration: 1.5,
+            delay: 0.1,
+            options: .calculationModeLinear,
+            animations: {
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                    self.closePhotoButton.alpha = 0
+                    image.layer.cornerRadius = 60
+                    image.layer.borderWidth = 3
+                    self.backgroundPhotoView.alpha = 0
+                }
+                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3) {
+                    image.transform = CGAffineTransform(scaleX: 1, y: 1)
+                    image.center = point
+                    
+                    self.closePhotoButton.isHidden = true
+
+                }
+            },
+            completion: {_ in
+                self.navigationController?.tabBarController?.tabBar.isHidden = false
+            }
+        )
     }
     
     

@@ -7,12 +7,18 @@
 
 import UIKit
 
+protocol ProfileHeaderViewDelegate: AnyObject {
+    func saveToPoint(image: UIImageView) -> CGPoint
+    func closePhoto(image: UIImageView, point: CGPoint)
+}
+
 final class ProfileHeaderView: UITableViewHeaderFooterView {
     
     //MARK: - Properties
     weak var delegate: ProfileViewControllerDelegate?
     private var statusText: String = ""
-    private let setProfileAvatar: UIImageView = {
+    var pointPhoto: CGPoint?
+     private let setProfileAvatar: UIImageView = {
         let profileAvatar = UIImageView()
         profileAvatar.image = UIImage(named: "cat")
         profileAvatar.layer.borderWidth = 3
@@ -33,9 +39,11 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }()
     private let statusLabel: UILabel = {
         let label = UILabel()
-        label.text = "Введите статус ниже"
+        label.text = "Нажми на меня для установки статуса"
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = true
+        label.numberOfLines = 2
         label.textColor = .gray
         return label
     }()
@@ -54,6 +62,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         text.keyboardType = .default
         text.autocorrectionType = .no
         text.returnKeyType = .done
+        text.isHidden = true
         text.delegate = self
         return text
     }()
@@ -69,27 +78,78 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         button.setTitle("Установить статус", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(pressButton), for: .touchUpInside)
+        button.isHidden = true
         return button
     }()
+    
+   
     
     //MARK: - Metods
     
     private func setupGestureRecognizer() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapPhotoAlert))
-        tapGesture.numberOfTapsRequired = 1
-        setProfileAvatar.addGestureRecognizer(tapGesture)
+        let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(didTapPhotoAlert))
+        tapGesturePhoto.numberOfTapsRequired = 1
+        setProfileAvatar.addGestureRecognizer(tapGesturePhoto)
+        let tapGestureStatus = UITapGestureRecognizer(target: self, action: #selector(didTapStatusShow))
+        tapGestureStatus.numberOfTapsRequired = 1
+        statusLabel.addGestureRecognizer(tapGestureStatus)
+        
+    
+    }
+    private lazy var backgroundPhoto: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0.5
+        return view
+    }()
+    
+    func animatePhoto(image: UIImageView) {
+        let screen = UIScreen.main.bounds.width / image.bounds.width
+        UIView.animateKeyframes(
+            withDuration: 1.5,
+            delay: 0.1,
+            options: .calculationModeLinear,
+            animations: {
+//                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5)
+//                    {
+                        self.backgroundPhoto.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                        image.center = CGPoint(x: UIScreen.main.bounds.midX, y: UIScreen.main.bounds.midY)
+                        image.transform = CGAffineTransform(scaleX: screen, y: screen)
+                        image.layer.cornerRadius = 0.0
+                        image.layer.borderWidth = 0
+//                        self.backgroundPhotoView.alpha = 0.5
+
+//                    }
+            
+            }
+            )
     }
     
     @objc private func didTapPhotoAlert() {
         print("tap complete")
-        delegate?.presentAlert()
+//        delegate?.openPhoto(image: setProfileAvatar)
+        pointPhoto = delegate?.savePoint(image: setProfileAvatar)
+//        delegate?.savePoint(image: setProfileAvatar)
+        delegate?.presentAlert(image: setProfileAvatar)
+        print(pointPhoto!)
+        
+        
+    }
+    
+    @objc private func didTapStatusShow() {
+        enterStatus.isHidden = false
+        statusButton.isHidden = false
     }
     
     private func didTapSetButton() {
         self.endEditing(true)
         statusLabel.text = statusText
         enterStatus.text = nil
-        enterStatus.placeholder = statusLabel.text
+        if statusLabel.text == "" {
+            statusLabel.text = "Нажми на меня для установки статуса"
+        }
+        enterStatus.isHidden = true
+        statusButton.isHidden = true
     }
     
     @objc private func setStatus(_ textField: UITextField) {
@@ -100,8 +160,11 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         didTapSetButton()
     }
     
+    
+    
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+        
         setupUI()
         setupGestureRecognizer()
     }
@@ -110,11 +173,13 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     private func setupUI() {
-        addSubview(setProfileAvatar)
         addSubview(nameLabel)
         addSubview(statusButton)
         addSubview(statusLabel)
         addSubview(enterStatus)
+       addSubview(backgroundPhoto)
+        addSubview(setProfileAvatar)
+       
         
         NSLayoutConstraint.activate([
             setProfileAvatar.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
@@ -124,6 +189,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             
             nameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 27),
+            nameLabel.leadingAnchor.constraint(equalTo: setProfileAvatar.trailingAnchor, constant: 16),
             
             
             statusLabel.bottomAnchor.constraint(equalTo: enterStatus.topAnchor, constant: -10),
@@ -138,7 +204,8 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             enterStatus.bottomAnchor.constraint(equalTo: statusButton.topAnchor, constant: -17),
             enterStatus.heightAnchor.constraint(equalToConstant: 40),
             enterStatus.leftAnchor.constraint(equalTo: nameLabel.leftAnchor, constant: 0),
-            enterStatus.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16)
+            enterStatus.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+           
         ])
         
     }
@@ -153,3 +220,5 @@ extension ProfileHeaderView: UITextFieldDelegate {
         return true
     }
 }
+
+
