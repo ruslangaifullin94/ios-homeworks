@@ -26,30 +26,11 @@ class PhotosViewController: UIViewController {
         return collection
     }()
     
-    private lazy var backgroundPhotoView: UIView = {
-        let photoView = UIView()
-        photoView.translatesAutoresizingMaskIntoConstraints = false
-        photoView.alpha = 0
-        photoView.backgroundColor = .black
-        photoView.isHidden = false
-        return photoView
-    }()
-    
-    private lazy var closePhotoButton: UIButton = {
-       let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.isHidden = true
-        button.alpha = 0
-        button.addTarget(self, action: #selector(cancelAnimation), for: .touchUpInside)
-        return button
-    }()
-    
+   
     private func setupConstraits() {
         
         view.addSubview(profilePhotoCollection)
-        view.addSubview(backgroundPhotoView)
-        view.addSubview(closePhotoButton)
+      
         
         let safeAreaGuideLine = view.safeAreaLayoutGuide
         
@@ -58,14 +39,6 @@ class PhotosViewController: UIViewController {
             profilePhotoCollection.leftAnchor.constraint(equalTo: safeAreaGuideLine.leftAnchor),
             profilePhotoCollection.bottomAnchor.constraint(equalTo: safeAreaGuideLine.bottomAnchor),
             profilePhotoCollection.rightAnchor.constraint(equalTo: safeAreaGuideLine.rightAnchor),
-            
-            backgroundPhotoView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundPhotoView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            backgroundPhotoView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            backgroundPhotoView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            closePhotoButton.topAnchor.constraint(equalTo: safeAreaGuideLine.topAnchor, constant: 10),
-            closePhotoButton.rightAnchor.constraint(equalTo: safeAreaGuideLine.rightAnchor, constant: -10)
 
         ])
         
@@ -88,10 +61,6 @@ class PhotosViewController: UIViewController {
 
     }
     
-    @objc private func cancelAnimation() {
-//        closePhoto(image: profileAvatar!, point: pointOnPhoto!)
-    }
-
 }
 
 extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -109,34 +78,6 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
         let model = photo[indexPath.row]
         cell.setupCollectionCell(with: model)
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let screen = UIScreen.main.bounds.width / (collectionView.cellForItem(at: indexPath)?.bounds.width)!
-        UIView.animateKeyframes(
-            withDuration: 1.5,
-            delay: 0.1,
-            options: .calculationModeLinear,
-            animations: {
-                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5)
-                    {
-                
-                        collectionView.cellForItem(at: indexPath)!.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
-                        collectionView.cellForItem(at: indexPath)!.transform = CGAffineTransform(scaleX: screen, y: screen)
-                       
-                        self.backgroundPhotoView.alpha = 0.5
-
-                    }
-                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3)
-                    {
-                        self.closePhotoButton.alpha = 1
-                        collectionView.cellForItem(at: indexPath)!.layer.cornerRadius = 0.0
-                        collectionView.cellForItem(at: indexPath)!.layer.borderWidth = 0
-                        self.closePhotoButton.isHidden = false
-                    }
-              
-            }
-        )
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

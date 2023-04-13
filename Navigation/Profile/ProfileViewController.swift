@@ -117,6 +117,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.section == 0 {
             let photosViewController = PhotosViewController()
             photosViewController.title = "Profile Photo"
+            tableView.deselectRow(at: indexPath, animated: false)
             self.navigationController?.pushViewController(photosViewController, animated: true)
         }
     }
