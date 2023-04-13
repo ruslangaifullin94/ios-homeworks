@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol ProfileHeaderViewDelegate: AnyObject {
-    func saveToPoint(image: UIImageView) -> CGPoint
-    func closePhoto(image: UIImageView, point: CGPoint)
-}
 
 final class ProfileHeaderView: UITableViewHeaderFooterView {
     
@@ -19,14 +15,13 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     private var statusText: String = ""
     var pointPhoto: CGPoint?
      private let setProfileAvatar: UIImageView = {
-        let profileAvatar = UIImageView()
+        let profileAvatar = UIImageView(frame: CGRect(x: 16, y: 16, width: 120, height: 120))
         profileAvatar.image = UIImage(named: "cat")
         profileAvatar.layer.borderWidth = 3
         profileAvatar.layer.cornerRadius = 60
         profileAvatar.clipsToBounds = true
         profileAvatar.layer.borderColor = .init(red: 1, green: 1, blue: 1, alpha: 1)
         profileAvatar.isUserInteractionEnabled = true
-        profileAvatar.translatesAutoresizingMaskIntoConstraints = false
         return profileAvatar
     }()
     public let nameLabel: UILabel = {
@@ -82,6 +77,22 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         return button
     }()
     
+     lazy var backgroundPhoto: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        view.backgroundColor = .black
+        view.alpha = 0
+        return view
+    }()
+    
+     lazy var closePhotoButton: UIButton = {
+       let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.isHidden = true
+        button.alpha = 0
+        button.addTarget(self, action: #selector(cancelAnimation), for: .touchUpInside)
+        return button
+    }()
    
     
     //MARK: - Metods
@@ -96,44 +107,14 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         
     
     }
-    private lazy var backgroundPhoto: UIView = {
-        let view = UIView()
-        view.backgroundColor = .black
-        view.alpha = 0.5
-        return view
-    }()
-    
-    func animatePhoto(image: UIImageView) {
-        let screen = UIScreen.main.bounds.width / image.bounds.width
-        UIView.animateKeyframes(
-            withDuration: 1.5,
-            delay: 0.1,
-            options: .calculationModeLinear,
-            animations: {
-//                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5)
-//                    {
-                        self.backgroundPhoto.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                        image.center = CGPoint(x: UIScreen.main.bounds.midX, y: UIScreen.main.bounds.midY)
-                        image.transform = CGAffineTransform(scaleX: screen, y: screen)
-                        image.layer.cornerRadius = 0.0
-                        image.layer.borderWidth = 0
-//                        self.backgroundPhotoView.alpha = 0.5
-
-//                    }
-            
-            }
-            )
+   
+    @objc private func cancelAnimation() {
+        delegate?.closePhoto(image: setProfileAvatar)
     }
     
     @objc private func didTapPhotoAlert() {
         print("tap complete")
-//        delegate?.openPhoto(image: setProfileAvatar)
-        pointPhoto = delegate?.savePoint(image: setProfileAvatar)
-//        delegate?.savePoint(image: setProfileAvatar)
         delegate?.presentAlert(image: setProfileAvatar)
-        print(pointPhoto!)
-        
-        
     }
     
     @objc private func didTapStatusShow() {
@@ -179,17 +160,14 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         addSubview(enterStatus)
        addSubview(backgroundPhoto)
         addSubview(setProfileAvatar)
+        addSubview(closePhotoButton)
        
         
         NSLayoutConstraint.activate([
-            setProfileAvatar.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            setProfileAvatar.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
-            setProfileAvatar.widthAnchor.constraint(equalToConstant: 120),
-            setProfileAvatar.heightAnchor.constraint(equalToConstant: 120),
             
             nameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 27),
-            nameLabel.leadingAnchor.constraint(equalTo: setProfileAvatar.trailingAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 152),
             
             
             statusLabel.bottomAnchor.constraint(equalTo: enterStatus.topAnchor, constant: -10),
@@ -199,12 +177,16 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
             statusButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             statusButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             statusButton.heightAnchor.constraint(equalToConstant: 50),
-            statusButton.topAnchor.constraint(equalTo: setProfileAvatar.bottomAnchor, constant: 30),
+            statusButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 166),
             
             enterStatus.bottomAnchor.constraint(equalTo: statusButton.topAnchor, constant: -17),
             enterStatus.heightAnchor.constraint(equalToConstant: 40),
             enterStatus.leftAnchor.constraint(equalTo: nameLabel.leftAnchor, constant: 0),
             enterStatus.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+            
+           
+            closePhotoButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            closePhotoButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10)
            
         ])
         
