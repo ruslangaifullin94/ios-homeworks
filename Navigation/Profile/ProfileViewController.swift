@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import StorageService
+
 protocol ProfileViewControllerDelegate: AnyObject {
     func presentAlert(image: UIImageView)
     func openPhoto(image: UIImageView)
@@ -32,6 +34,7 @@ class ProfileViewController: UIViewController {
 
    private lazy var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
+       
         headerView.delegate = self
        return headerView
     }()
@@ -61,7 +64,11 @@ class ProfileViewController: UIViewController {
     }
     
     private func setupView() {
+        #if DEBUG
         view.backgroundColor = .systemBackground
+        #else
+        view.backgroundColor = .brown
+        #endif
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 0),
