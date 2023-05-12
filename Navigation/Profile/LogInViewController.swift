@@ -10,9 +10,12 @@ import UIKit
 class LogInViewController: UIViewController {
     
     // MARK: - Properties
-    
-    private let loginData = "test"
-    private let passData = "123"
+    #if DEBUG
+    private var userService: TestUserService
+
+    #else
+    private var userService: CurrentUserService
+    #endif
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -107,7 +110,25 @@ class LogInViewController: UIViewController {
     }()
     
     //MARK: - LifeCycle
-   
+ 
+    #if DEBUG
+    init(userService: TestUserService) {
+        self.userService = userService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    #else
+    init(userService: CurrentUserService) {
+        self.userService = userService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    #endif
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -143,6 +164,24 @@ class LogInViewController: UIViewController {
         scrollView.contentOffset = CGPoint(x: 0, y: 0)
         }
     @objc private func logIn() {
+        
+        switch self.userService.logInToUser(login.text) {
+
+        case .success(let user):
+            let profileViewController = ProfileViewController(currentUser: user)
+            self.navigationController?.pushViewController(profileViewController, animated: true)
+        case .failure(let error):
+            switch error {
+            case .wrongLogin:
+                ()
+                //show alert login
+            case .uncorrectLogin:
+                ()
+                //show alert no login
+            }
+        }
+        
+        
 //        if (login.text == loginData) && (password.text == passData) {
 //            if login.isSelected {
 //                login.alpha = 0.8
@@ -152,8 +191,8 @@ class LogInViewController: UIViewController {
 //            let profileViewController = ProfileViewController()
 //            self.navigationController?.pushViewController(profileViewController, animated: true)
 //        }
-        let profileViewController = ProfileViewController()
-        self.navigationController?.pushViewController(profileViewController, animated: true)
+//        let profileViewController = ProfileViewController()
+//        self.navigationController?.pushViewController(profileViewController, animated: true)
     }
     
     

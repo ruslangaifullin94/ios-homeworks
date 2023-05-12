@@ -17,6 +17,8 @@ class ProfileViewController: UIViewController {
    
     //MARK: - Properties
     
+    private let currentUser: User
+    
     fileprivate let data = Post.make()
     
     private var pointOnPhoto: CGPoint?
@@ -32,11 +34,21 @@ class ProfileViewController: UIViewController {
 
    private lazy var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
+       headerView.setupUser(self.currentUser)
         headerView.delegate = self
        return headerView
     }()
     
     //MARK: - LifeCycle
+    
+    init(currentUser: User) {
+        self.currentUser = currentUser
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +65,8 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
     }
+    
+    
     
     //MARK: - Metods
     

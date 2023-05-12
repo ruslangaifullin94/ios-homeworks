@@ -25,6 +25,8 @@
 		5A4C05B329DAF084004534BA /* Photos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C05B229DAF084004534BA /* Photos.swift */; };
 		5A4C05B529DC918B004534BA /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C05B429DC918A004534BA /* PhotoCollectionViewCell.swift */; };
 		5A4C05B729E063D8004534BA /* CellReuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C05B629E063D8004534BA /* CellReuse.swift */; };
+		5AF6D5152A0E88F7003640B5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5142A0E88F7003640B5 /* User.swift */; };
+		5AF6D5172A0EC719003640B5 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5162A0EC719003640B5 /* UserData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		5A4C05B229DAF084004534BA /* Photos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photos.swift; sourceTree = "<group>"; };
 		5A4C05B429DC918A004534BA /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		5A4C05B629E063D8004534BA /* CellReuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellReuse.swift; sourceTree = "<group>"; };
+		5AF6D5142A0E88F7003640B5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5AF6D5162A0EC719003640B5 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,8 @@
 				5A3902E829B79B1F005751E3 /* Post.swift */,
 				5A4C05B229DAF084004534BA /* Photos.swift */,
 				5A4C05B629E063D8004534BA /* CellReuse.swift */,
+				5AF6D5142A0E88F7003640B5 /* User.swift */,
+				5AF6D5162A0EC719003640B5 /* UserData.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -204,10 +210,12 @@
 				5A3902EB29B7A623005751E3 /* InfoViewController.swift in Sources */,
 				5A3902E929B79B1F005751E3 /* Post.swift in Sources */,
 				5A4C05B329DAF084004534BA /* Photos.swift in Sources */,
+				5AF6D5152A0E88F7003640B5 /* User.swift in Sources */,
 				5A3902E329B777AF005751E3 /* ProfileViewController.swift in Sources */,
 				5A4C05AD29D2E6C9004534BA /* HeaderTableView.swift in Sources */,
 				5A3902CD29B762D8005751E3 /* SceneDelegate.swift in Sources */,
 				5A4C05AF29D82E02004534BA /* PhotosViewController.swift in Sources */,
+				5AF6D5172A0EC719003640B5 /* UserData.swift in Sources */,
 				5A4C05B529DC918B004534BA /* PhotoCollectionViewCell.swift in Sources */,
 				5A4C05B129DAF054004534BA /* PhotoTableViewCell.swift in Sources */,
 				5A4C05AB29CCCC29004534BA /* PostTableViewCell.swift in Sources */,
