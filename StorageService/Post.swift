@@ -22,7 +22,7 @@ extension Post {
                  image: "vedmak",
                  likes: 213,
                  views: 1280
-            ),
+            ) ,
             Post(
                 author: "dzen",
                 description: "попробуй новую площадку для твоих статей и публикаций. Легкие настройки монетизации",

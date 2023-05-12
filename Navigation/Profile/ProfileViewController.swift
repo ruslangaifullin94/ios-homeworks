@@ -54,6 +54,7 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
         navigationController?.isNavigationBarHidden = true
     }
     
@@ -233,7 +234,7 @@ extension ProfileViewController: ProfileViewControllerDelegate {
                     header.backgroundPhoto.alpha = 0
                 }
                 UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3) {
-                    self.profileAvatar!.transform = CGAffineTransform(scaleX: 1, y: 1)
+                    self.profileAvatar!.transform = .identity
                     self.profileAvatar!.center = self.pointOnPhoto!
                     header.closePhotoButton.isHidden = true
 

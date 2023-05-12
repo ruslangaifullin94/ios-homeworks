@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SnapKit
 
 final class ProfileHeaderView: UITableViewHeaderFooterView {
     
@@ -29,14 +29,12 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         label.text = "Cat Lucy"
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.textColor = .black
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     private let statusLabel: UILabel = {
         let label = UILabel()
         label.text = "Нажми на меня для установки статуса"
         label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = true
         label.numberOfLines = 2
         label.textColor = .gray
@@ -50,7 +48,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         text.layer.borderColor = UIColor.black.cgColor
         text.layer.borderWidth = 1
         text.layer.cornerRadius = 15
-        text.translatesAutoresizingMaskIntoConstraints = false
         text.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: text.frame.height))
         text.leftViewMode = .always
         text.addTarget(self, action: #selector(setStatus(_:)), for: .editingChanged)
@@ -63,7 +60,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }()
     private lazy var statusButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 4
         button.layer.shadowOffset = CGSize(width: 4.0, height: 4.0)
@@ -86,7 +82,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     
      lazy var closePhotoButton: UIButton = {
        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.isHidden = true
         button.alpha = 0
@@ -161,35 +156,38 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
        addSubview(backgroundPhoto)
         addSubview(setProfileAvatar)
         addSubview(closePhotoButton)
+        
+        
+        nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(27)
+            make.leading.equalToSuperview().offset(152)
+            make.trailing.equalToSuperview().offset(-10)
+        }
        
+        statusLabel.snp.makeConstraints{ make in
+            make.bottom.equalTo(enterStatus.snp.top).offset(-10)
+            make.leading.equalTo(nameLabel.snp.leading)
+            make.trailing.equalToSuperview().offset(-40)
+        }
         
-        NSLayoutConstraint.activate([
-            
-            nameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 27),
-            nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 152),
-            
-            
-            statusLabel.bottomAnchor.constraint(equalTo: enterStatus.topAnchor, constant: -10),
-            statusLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: 0),
-            statusLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40),
-            
-            statusButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            statusButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            statusButton.heightAnchor.constraint(equalToConstant: 50),
-            statusButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 166),
-            
-            enterStatus.bottomAnchor.constraint(equalTo: statusButton.topAnchor, constant: -17),
-            enterStatus.heightAnchor.constraint(equalToConstant: 40),
-            enterStatus.leftAnchor.constraint(equalTo: nameLabel.leftAnchor, constant: 0),
-            enterStatus.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
-            
-           
-            closePhotoButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            closePhotoButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10)
-           
-        ])
+        statusButton.snp.makeConstraints{ make in
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.height.equalTo(50)
+            make.top.equalToSuperview().offset(166)
+        }
+        enterStatus.snp.makeConstraints{ make in
+            make.bottom.equalTo(statusButton.snp.top).offset(-17)
+            make.left.equalTo(nameLabel.snp.left)
+            make.right.equalToSuperview().offset(-16)
+            make.height.equalTo(40)
+        }
         
+        closePhotoButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.right.equalToSuperview().offset(-10)
+        }
+      
     }
 }
 

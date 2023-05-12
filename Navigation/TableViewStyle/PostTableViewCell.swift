@@ -7,6 +7,7 @@
 
 import UIKit
 import StorageService
+import iOSIntPackage
 
 class PostTableViewCell: UITableViewCell {
     
@@ -105,10 +106,16 @@ class PostTableViewCell: UITableViewCell {
         ])
         
     }
-    
+    let imageFilter = ImageProcessor()
     func update (_ model: Post) {
         authorLabel.text = model.author
         picOfPost.image = UIImage(named: model.image)
+        let image = picOfPost.image
+        imageFilter.processImage(sourceImage: image!, filter: ColorFilter.allCases.randomElement()!) {(processedImage) in
+            if let image = processedImage {
+                picOfPost.image = image
+            }
+        }
         descriptionText.text = model.description
         likeLabel.text = "Likes: " + String(model.likes)
         viewsLabel.text = "Views: " + String(model.views)
