@@ -27,6 +27,7 @@
 		5A4C05B729E063D8004534BA /* CellReuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C05B629E063D8004534BA /* CellReuse.swift */; };
 		5AF6D5152A0E88F7003640B5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5142A0E88F7003640B5 /* User.swift */; };
 		5AF6D5172A0EC719003640B5 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5162A0EC719003640B5 /* UserData.swift */; };
+		5AF6D53D2A115AB5003640B5 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D53C2A115AB5003640B5 /* RegistrationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		5A4C05B629E063D8004534BA /* CellReuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellReuse.swift; sourceTree = "<group>"; };
 		5AF6D5142A0E88F7003640B5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5AF6D5162A0EC719003640B5 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		5AF6D53C2A115AB5003640B5 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				5A3902EE29B8DF5C005751E3 /* ProfileHeaderView.swift */,
 				5A4C05A729CB16B9004534BA /* LogInViewController.swift */,
 				5A4C05AE29D82E02004534BA /* PhotosViewController.swift */,
+				5AF6D53C2A115AB5003640B5 /* RegistrationViewController.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 			files = (
 				5A3902E729B781BA005751E3 /* PostViewController.swift in Sources */,
 				5A3902CB29B762D8005751E3 /* AppDelegate.swift in Sources */,
+				5AF6D53D2A115AB5003640B5 /* RegistrationViewController.swift in Sources */,
 				5A4C05A829CB16B9004534BA /* LogInViewController.swift in Sources */,
 				5A3902E129B777A2005751E3 /* FeedViewController.swift in Sources */,
 				5A3902EB29B7A623005751E3 /* InfoViewController.swift in Sources */,

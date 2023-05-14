@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol LoginViewControllerDelegate: AnyObject {
+    func presentRegAlert()
+}
+
 class LogInViewController: UIViewController {
     
     // MARK: - Properties
@@ -97,8 +101,20 @@ class LogInViewController: UIViewController {
         button.addTarget(self, action: #selector(logIn), for: .touchUpInside)
         return button
     }()
+    private lazy var regButton: UIButton = {
+       let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Registration", for: .normal)
+        button.setBackgroundImage(UIImage(named: "blue_pixel"), for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10.0
+        button.clipsToBounds = true
+        button.alpha = 1
+        button.addTarget(self, action: #selector(registration(_:)), for: .touchUpInside)
+        return button
+    }()
     
-    private lazy var logInStack: UIStackView = { [unowned self] in
+    private lazy var logInStack: UIStackView = {
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.clipsToBounds = true
@@ -173,28 +189,14 @@ class LogInViewController: UIViewController {
         case .failure(let error):
             switch error {
             case .wrongLogin:
-                ()
-                //show alert login
-            case .uncorrectLogin:
-                ()
-                //show alert no login
+                presentAlert("Логин не найден. Повторите ввод.")
             }
         }
-        
-        
-//        if (login.text == loginData) && (password.text == passData) {
-//            if login.isSelected {
-//                login.alpha = 0.8
-//            } else if login.isHighlighted {
-//                login.alpha = 0.8
-//            }
-//            let profileViewController = ProfileViewController()
-//            self.navigationController?.pushViewController(profileViewController, animated: true)
-//        }
-//        let profileViewController = ProfileViewController()
-//        self.navigationController?.pushViewController(profileViewController, animated: true)
     }
     
+    @objc private func registration(_ sender: UIButton) {
+        presentPopUp(sender, sourceRect: sender.bounds)
+    }
     
     private func setupConstraits() {
         let safeAreaGuide = view.safeAreaLayoutGuide
@@ -214,6 +216,11 @@ class LogInViewController: UIViewController {
             logInButton.leftAnchor.constraint(equalTo: logInStack.leftAnchor, constant: 0),
             logInButton.heightAnchor.constraint(equalToConstant: 50),
             
+            regButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 16),
+            regButton.rightAnchor.constraint(equalTo: logInButton.rightAnchor, constant: 0),
+            regButton.leftAnchor.constraint(equalTo: logInButton.leftAnchor, constant: 0),
+            regButton.heightAnchor.constraint(equalToConstant: 50),
+            
             scrollView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
@@ -231,6 +238,7 @@ class LogInViewController: UIViewController {
         contentView.addSubview(logo)
         contentView.addSubview(logInStack)
         contentView.addSubview(logInButton)
+        contentView.addSubview(regButton)
     }
     private func setupKeybordsObservers() {
         let notificationCenter = NotificationCenter.default
@@ -270,3 +278,28 @@ extension LogInViewController: UITextFieldDelegate {
         return true
     }
 }
+
+extension LogInViewController {
+    func presentAlert(_ error: String) {
+        let optionMenu = UIAlertController(title: "Ошибка", message: "\(error)", preferredStyle: .alert)
+        let optionAction = UIAlertAction(title: "Ok", style: .default)
+        optionMenu.addAction(optionAction)
+        self.navigationController?.present(optionMenu, animated: true)
+    }
+}
+
+extension LogInViewController {
+    func presentPopUp(_ button: UIButton, sourceRect: CGRect) {
+        let view = RegistrationViewController()
+        view.preferredContentSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 300)
+        view.modalPresentationStyle = .popover
+        view.popoverPresentationController?.delegate = view
+        view.popoverPresentationController?.permittedArrowDirections = .down
+        view.popoverPresentationController?.sourceView = button
+        view.popoverPresentationController?.sourceRect = sourceRect
+        self.present(view, animated: true, completion: {
+            view.view.superview?.layer.cornerRadius = 4.0
+        })
+    }
+}
+
