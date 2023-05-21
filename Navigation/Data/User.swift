@@ -5,7 +5,6 @@
 //  Created by Руслан Гайфуллин on 12.05.2023.
 //
 
-import Foundation
 import UIKit
 
 struct User {
@@ -13,7 +12,7 @@ struct User {
     var userAvatar: UIImage?
     var userName: String
     var userStatus: String
-    
+    var password: String
 //    init(userLogin: String, userAvatar: UIImage?, userName: String, userStatus: String) {
 //        self.userLogin = userLogin
 //        self.userAvatar = userAvatar
@@ -21,6 +20,7 @@ struct User {
 //        self.userStatus = userStatus
 //    }
 }
+
 enum UserServiceError: Error {
     case wrongLogin
 //    case wrongPassword
@@ -30,9 +30,9 @@ protocol UserService {
 }
 
 internal var userData: [User] = [
-    User(userLogin: "ruslan", userAvatar: UIImage(named: "rus"), userName: "Ruslan G", userStatus: "I love iOS"),
-    User(userLogin: "kate", userAvatar: UIImage(named: "heart"), userName: "Kate G", userStatus: "I love Ruslan"),
-    User(userLogin: "cat", userAvatar: UIImage(named: "cat"), userName: "Cat Lucy", userStatus: "I love sleep")
+    User(userLogin: "ruslan", userAvatar: UIImage(named: "rus"), userName: "Ruslan G", userStatus: "I love iOS", password: "rusrus"),
+    User(userLogin: "kate", userAvatar: UIImage(named: "heart"), userName: "Kate G", userStatus: "I love Ruslan", password: "katekate"),
+    User(userLogin: "cat", userAvatar: UIImage(named: "cat"), userName: "Cat Lucy", userStatus: "I love sleep", password: "catcat")
 ]
 
 class CurrentUserService: UserService {
@@ -57,7 +57,8 @@ class TestUserService: UserService {
         userLogin: "cat",
         userAvatar: UIImage(named: "cat"),
         userName: "CAt Lucy",
-        userStatus: "I love Sleep"
+        userStatus: "I love Sleep",
+        password: "testcat"
     )
     
     func logInToUser(_ userLogin: String?) -> Result<User, UserServiceError> {

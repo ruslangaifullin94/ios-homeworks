@@ -134,7 +134,7 @@ class RegistrationViewController: UIViewController {
     
     @objc private func registration() {
         if (enterLogin.text != "") && (enterName.text != "") {
-            var newProfile = User(userLogin: enterLogin.text!, userAvatar: UIImage(named: "cat"), userName: enterName.text!, userStatus: enterStatus.text!)
+            var newProfile = User(userLogin: enterLogin.text!, userAvatar: UIImage(named: "cat"), userName: enterName.text!, userStatus: enterStatus.text!, password: enterLogin.text! + enterLogin.text!)
             if newProfile.userStatus == "" {
                 newProfile.userStatus = "нет статуса"
             }

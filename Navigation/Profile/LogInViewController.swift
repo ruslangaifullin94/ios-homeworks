@@ -7,9 +7,7 @@
 
 import UIKit
 
-protocol LoginViewControllerDelegate: AnyObject {
-    func presentRegAlert()
-}
+
 
 class LogInViewController: UIViewController {
     
@@ -19,7 +17,10 @@ class LogInViewController: UIViewController {
 
     #else
     private var userService: CurrentUserService
+
     #endif
+    
+    var loginDelegate: LoginViewControllerDelegate?
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -138,7 +139,6 @@ class LogInViewController: UIViewController {
         self.userService = userService
         super.init(nibName: nil, bundle: nil)
     }
-    
     #endif
     
     required init?(coder: NSCoder) {
@@ -181,11 +181,27 @@ class LogInViewController: UIViewController {
         }
     @objc private func logIn() {
         
+        guard let loginDelegate = self.loginDelegate else {return}
         switch self.userService.logInToUser(login.text) {
-
         case .success(let user):
-            let profileViewController = ProfileViewController(currentUser: user)
-            self.navigationController?.pushViewController(profileViewController, animated: true)
+            
+            switch loginDelegate.check(user.userLogin, password.text) {
+                
+            case .failure(let error):
+                switch error {
+                case .wrongLogin:
+                    print("login off")
+                    presentAlert(error.errorDescription)
+                case .wrongPass:
+                    print("pass off")
+                    presentAlert(error.errorDescription)
+                }
+            case .success(_):
+                let profileViewController = ProfileViewController(currentUser: user)
+                self.navigationController?.pushViewController(profileViewController, animated: true)
+                
+            }
+
         case .failure(let error):
             switch error {
             case .wrongLogin:

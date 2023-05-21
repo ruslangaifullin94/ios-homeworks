@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import iOSIntPackage
 
-class PhotosViewController: UIViewController {
+class PhotosViewController: UIViewController, ImageLibrarySubscriber {
+    
+    var imagePublisherFacade = ImagePublisherFacade()
     
     fileprivate var photo = Photo.make()
 
@@ -58,7 +61,6 @@ class PhotosViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .systemBackground
-
     }
     
 }
@@ -71,6 +73,7 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         photo.count
+        
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -94,4 +97,10 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
 
+}
+
+extension PhotosViewController {
+    func receive(images: [UIImage]) {
+        <#code#>
+    }
 }
