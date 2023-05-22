@@ -30,9 +30,14 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             fatalError("init(coder:) has not been implemented")
         }
         
-        func setupCollectionCell(with photo: Photo) {
+        func setupCollectionTableCell(with photo: Photo) {
             self.photo = photo
             imageCollectionCell.image = UIImage(named: photo.imageTitle)
+        }
+    
+        func setupCollectionCell(with image: UIImage) {
+//        self.photo = photo
+        imageCollectionCell.image = image
         }
         
         private func setupConstraits() {

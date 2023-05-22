@@ -89,7 +89,7 @@ extension PhotoTableViewCell: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellReuseID.photo.rawValue, for: indexPath) as? PhotoCollectionViewCell else {return UICollectionViewCell()}
         let model = photo[indexPath.row]
-        cell.setupCollectionCell(with: model)
+        cell.setupCollectionTableCell(with: model)
         return cell
     }
     

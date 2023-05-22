@@ -8,10 +8,10 @@
 import UIKit
 import iOSIntPackage
 
-class PhotosViewController: UIViewController, ImageLibrarySubscriber {
+class PhotosViewController: UIViewController {
     
-    var imagePublisherFacade = ImagePublisherFacade()
-    
+    let imagePublisherFacade = ImagePublisherFacade()
+    var newPhoto: [UIImage] = []
     fileprivate var photo = Photo.make()
 
     private lazy var profilePhotoCollection: UICollectionView = {
@@ -30,11 +30,33 @@ class PhotosViewController: UIViewController, ImageLibrarySubscriber {
     }()
     
    
+   
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        imagePublisherFacade.subscribe(self)
+        imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: newPhotoAlbum)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        navigationController?.isNavigationBarHidden = false
+        setupConstraits()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        imagePublisherFacade.removeSubscription(for: self)
+    }
+    
+    private func setupView() {
+        view.backgroundColor = .systemBackground
+    }
+    
     private func setupConstraits() {
         
         view.addSubview(profilePhotoCollection)
-      
-        
         let safeAreaGuideLine = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
@@ -47,22 +69,6 @@ class PhotosViewController: UIViewController, ImageLibrarySubscriber {
         
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        navigationController?.isNavigationBarHidden = false
-        setupConstraits()
-    }
-    
-    private func setupView() {
-        view.backgroundColor = .systemBackground
-    }
-    
 }
 
 extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -72,13 +78,13 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        photo.count
+        newPhoto.count
         
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellReuseID.photoCollection.rawValue, for: indexPath) as? PhotoCollectionViewCell else {return UICollectionViewCell()}
-        let model = photo[indexPath.row]
+        let model = newPhoto[indexPath.item]
         cell.setupCollectionCell(with: model)
         return cell
     }
@@ -99,8 +105,14 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
 
 }
 
-extension PhotosViewController {
+extension PhotosViewController: ImageLibrarySubscriber {
+ 
     func receive(images: [UIImage]) {
-        <#code#>
+        
+        for image in images {
+            imagePublisherFacade.rechargeImageLibrary()
+            newPhoto.append(image)
+        }
+        profilePhotoCollection.reloadData()
     }
 }

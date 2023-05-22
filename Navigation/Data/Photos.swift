@@ -36,3 +36,10 @@ extension Photo {
         ]
     }
 }
+
+var newPhotoAlbum: [UIImage] = []
+
+func createPhotosArray() {
+    newPhotoAlbum = (1...20).compactMap { UIImage(named: "photo\($0)") }
+}
+

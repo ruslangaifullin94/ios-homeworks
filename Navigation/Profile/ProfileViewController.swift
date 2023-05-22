@@ -34,6 +34,7 @@ class ProfileViewController: UIViewController {
 
    private lazy var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
+       
        headerView.setupUser(self.currentUser)
         headerView.delegate = self
        return headerView
@@ -81,7 +82,8 @@ class ProfileViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 0),
             tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
+            
         ])
     }
     

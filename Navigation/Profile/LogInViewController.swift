@@ -62,6 +62,7 @@ class LogInViewController: UIViewController {
         login.autocorrectionType = .no
         login.returnKeyType = .continue
         login.tag = 0
+        login.text = "cat"
         login.delegate = self
         return login
     }()
@@ -71,6 +72,7 @@ class LogInViewController: UIViewController {
         password.translatesAutoresizingMaskIntoConstraints = false
         password.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: password.frame.height))
         password.placeholder = "Password"
+        password.text = "catcat"
         password.leftViewMode = .always
         password.layer.borderColor = UIColor.systemGray.cgColor
         password.layer.borderWidth = 0.5
@@ -185,7 +187,7 @@ class LogInViewController: UIViewController {
         switch self.userService.logInToUser(login.text) {
         case .success(let user):
             
-            switch loginDelegate.check(user.userLogin, password.text) {
+            switch loginDelegate.check(user.userLogin, password.text!) {
                 
             case .failure(let error):
                 switch error {

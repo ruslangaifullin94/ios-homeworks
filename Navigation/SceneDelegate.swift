@@ -22,27 +22,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func createLogInViewController() -> UINavigationController {
       
         #if DEBUG
-         
-        
-        let testUserService = TestUserService()
-        let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
-        let profileViewController = LogInViewController(userService: testUserService)
-        profileViewController.title = "Профиль"
-        profileViewController.loginDelegate = loginViewControllerDelegate
-        profileViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
-        return UINavigationController(rootViewController: profileViewController)
-        
+        let userService = TestUserService()
         #else
-
-        let currentUserService = CurrentUserService()
-        let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
-        let profileViewController = LogInViewController(userService: currentUserService)
-        profileViewController.title = "Профиль"
-        profileViewController.loginDelegate = loginViewControllerDelegate
-        profileViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
-        return UINavigationController(rootViewController: profileViewController)
-        
+        let userService = CurrentUserService()
         #endif
+
+        let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
+        let loginViewController = LogInViewController(userService: userService)
+        loginViewController.title = "Профиль"
+        loginViewController.loginDelegate = loginViewControllerDelegate
+        loginViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
+        return UINavigationController(rootViewController: loginViewController)
+        
     }
     func createTabBarController() -> UITabBarController {
         let tabBarController = UITabBarController()
@@ -56,6 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: scene)
         window.rootViewController = createTabBarController()
         window.makeKeyAndVisible()
+        createPhotosArray()
         self.window = window
     }
 

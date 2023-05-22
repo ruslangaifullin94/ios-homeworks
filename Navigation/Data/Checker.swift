@@ -22,7 +22,7 @@ enum CheckerError: Error {
 }
 
 protocol LoginViewControllerDelegate {
-    func check(_ login: String?, _ pass: String?) -> Result<Bool, CheckerError>
+    func check(_ login: String, _ pass: String) -> Result<Bool, CheckerError>
 }
 
 protocol LoginFactory {
@@ -40,16 +40,10 @@ struct MyLoginFactory: LoginFactory {
 }
 struct LoginInspector: LoginViewControllerDelegate {
     
-    func check(_ login: String?, _ pass: String?) -> Result<Bool, CheckerError> {
-        
-        guard login == Checker.shared.login else {
-            return .failure(.wrongLogin)
-        }
-        guard pass == Checker.shared.password else {
-            return .failure(.wrongPass)
-        }
-        return .success(true)
+    func check(_ login: String, _ pass: String) -> Result<Bool, CheckerError> {
+        Checker.shared.check(login, pass)
     }
+   
 }
 
 class Checker {
@@ -58,10 +52,20 @@ class Checker {
     
     init() {}
     
-    let login = "cat"
+    let login = "cat".hash
     
-    let password = "catcat"
+    let password = "catcat".hash
     
+    func check(_ login: String, _ pass: String) -> Result<Bool, CheckerError> {
+        
+        guard login.hash == Checker.shared.login else {
+            return .failure(.wrongLogin)
+        }
+        guard pass.hash == Checker.shared.password else {
+            return .failure(.wrongPass)
+        }
+        return .success(true)
+    }
 
 }
 
