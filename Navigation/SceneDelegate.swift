@@ -19,15 +19,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return UINavigationController(rootViewController: feedViewController)
     }
     
-    func createProfileViewController() -> UINavigationController {
-        let profileViewController = ProfileViewController()
-        profileViewController.title = "Профиль"
-        profileViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
-        return UINavigationController(rootViewController: profileViewController)
+    func createLogInViewController() -> UINavigationController {
+      
+        #if DEBUG
+        let userService = TestUserService()
+        #else
+        let userService = CurrentUserService()
+        #endif
+
+        let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
+        let loginViewController = LogInViewController(userService: userService)
+        loginViewController.title = "Профиль"
+        loginViewController.loginDelegate = loginViewControllerDelegate
+        loginViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
+        return UINavigationController(rootViewController: loginViewController)
+        
     }
     func createTabBarController() -> UITabBarController {
         let tabBarController = UITabBarController()
-        let controllers = [createFeedViewController(),createProfileViewController()]
+        let controllers = [createFeedViewController(),createLogInViewController()]
         tabBarController.viewControllers = controllers
         return tabBarController
     }
@@ -37,6 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: scene)
         window.rootViewController = createTabBarController()
         window.makeKeyAndVisible()
+        createPhotosArray()
         self.window = window
     }
 
