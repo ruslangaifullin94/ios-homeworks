@@ -46,7 +46,7 @@ struct LoginInspector: LoginViewControllerDelegate {
    
 }
 
-class Checker {
+final class Checker {
     
     static let shared = Checker()
     

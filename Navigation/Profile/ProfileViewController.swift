@@ -13,13 +13,13 @@ protocol ProfileViewControllerDelegate: AnyObject {
     func closePhoto(image: UIImageView)
 }
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
    
     //MARK: - Properties
+    private let viewModel: ProfileViewModelProtocol
     
-    private let currentUser: User
+//    private let currentUser: User
     
-    fileprivate let data = Post.make()
     
     private var pointOnPhoto: CGPoint?
     private var profileAvatar: UIImageView?
@@ -35,15 +35,15 @@ class ProfileViewController: UIViewController {
    private lazy var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
        
-       headerView.setupUser(self.currentUser)
+       headerView.setupUser(self.viewModel.currentUser)
         headerView.delegate = self
        return headerView
     }()
     
     //MARK: - LifeCycle
     
-    init(currentUser: User) {
-        self.currentUser = currentUser
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -70,6 +70,7 @@ class ProfileViewController: UIViewController {
     
     
     //MARK: - Metods
+    
     
     private func addSubviews(){
         view.addSubview(tableView)
@@ -124,18 +125,16 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 {
             return 1
         } else {
-            return data.count
+            return viewModel.data.count
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         if indexPath.section == 0 {
-            let photosViewController = PhotosViewController()
-            photosViewController.title = "Profile Photo"
-            tableView.deselectRow(at: indexPath, animated: false)
-            self.navigationController?.pushViewController(photosViewController, animated: true)
+            self.viewModel.didTapPhotoCollection()
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     
@@ -150,7 +149,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.base.rawValue, for: indexPath) as? PostTableViewCell else {
                 fatalError("could not dequeueReusableCell")
             }
-            cell.update(data[indexPath.row])
+            cell.update(viewModel.data[indexPath.row])
             return cell
         }
     }

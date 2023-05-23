@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RegistrationViewController: UIViewController {
+final class RegistrationViewController: UIViewController {
     
     private lazy var enterLogin: UITextField = {
         let login  = UITextField()

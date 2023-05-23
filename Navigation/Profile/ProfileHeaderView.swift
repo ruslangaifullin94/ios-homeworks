@@ -13,12 +13,15 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     //MARK: - Properties
     
     private var currentUser: User?
+    
     weak var delegate: ProfileViewControllerDelegate?
+    
     private var statusText: String = ""
+    
     var pointPhoto: CGPoint?
+    
      private let setProfileAvatar: UIImageView = {
         let profileAvatar = UIImageView(frame: CGRect(x: 16, y: 16, width: 120, height: 120))
-//        profileAvatar.image = UIImage(named: "cat")
         profileAvatar.layer.borderWidth = 3
         profileAvatar.layer.cornerRadius = 60
         profileAvatar.clipsToBounds = true
@@ -28,7 +31,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }()
     public let nameLabel: UILabel = {
         let label = UILabel()
-//        label.text = "Cat Lucy"
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +38,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }()
     private let statusLabel: UILabel = {
         let label = UILabel()
-//        label.text = "Нажми на меня для установки статуса"
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = true
@@ -63,18 +64,8 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         text.delegate = self
         return text
     }()
-    private lazy var statusButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 4
-        button.layer.shadowOffset = CGSize(width: 4.0, height: 4.0)
-        button.layer.shadowRadius = 4
-        button.layer.shadowColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
-        button.layer.shadowOpacity = 0.7
-        button.setTitle("Установить статус", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(pressButton), for: .touchUpInside)
+    private lazy var statusButton: CustomButton = {
+        let button = CustomButton(title: "Установить статус", titleColor: .white, buttonAction: pressButton)
         button.isHidden = true
         return button
     }()

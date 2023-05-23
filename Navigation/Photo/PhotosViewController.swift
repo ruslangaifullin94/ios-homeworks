@@ -12,7 +12,7 @@ class PhotosViewController: UIViewController {
     
     let imagePublisherFacade = ImagePublisherFacade()
     var newPhoto: [UIImage] = []
-    fileprivate var photo = Photo.make()
+//    fileprivate var photo = Photo.make()
 
     private lazy var profilePhotoCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
