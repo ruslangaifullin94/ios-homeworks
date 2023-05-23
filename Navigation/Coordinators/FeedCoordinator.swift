@@ -15,7 +15,6 @@ extension FeedCoordinator: CoordinatorProtocol {
     func start() -> UIViewController {
         let feedModel = FeedModel()
         let feedViewController = FeedViewController(feedModelService: feedModel)
-//        feedViewController.title = "Лента"
         let navController = UINavigationController(rootViewController: feedViewController)
         navController.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "doc.richtext"), tag: 0)
         return navController

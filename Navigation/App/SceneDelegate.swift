@@ -12,37 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     var mainCoordinator: CoordinatorProtocol?
-
-//    func createFeedViewController() -> UINavigationController {
-//        let feedModel = FeedModel()
-//        let feedViewController = FeedViewController(feedModelService: feedModel)
-//        feedViewController.title = "Лента"
-//        feedViewController.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "doc.richtext"), tag: 0)
-//        return UINavigationController(rootViewController: feedViewController)
-//    }
-//
-//    func createLogInViewController() -> UINavigationController {
-//
-//        #if DEBUG
-//        let userService = TestUserService()
-//        #else
-//        let userService = CurrentUserService()
-//        #endif
-//
-//        let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
-//        let loginViewController = LogInViewController(userService: userService)
-//        loginViewController.title = "Профиль"
-//        loginViewController.loginDelegate = loginViewControllerDelegate
-//        loginViewController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
-//        return UINavigationController(rootViewController: loginViewController)
-//
-//    }
-//    func createTabBarController() -> UITabBarController {
-//        let tabBarController = UITabBarController()
-//        let controllers = [createFeedViewController(),createLogInViewController()]
-//        tabBarController.viewControllers = controllers
-//        return tabBarController
-//    }
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     
         guard let scene = (scene as? UIWindowScene) else { return }
