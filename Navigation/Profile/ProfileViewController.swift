@@ -54,13 +54,14 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
-       
-    }
-    
-    override func viewWillLayoutSubviews() {
         addSubviews()
         setupView()
         tuneTableView()
+        bindViewModel()
+    }
+    
+    override func viewWillLayoutSubviews() {
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +72,16 @@ final class ProfileViewController: UIViewController {
     
     //MARK: - Metods
     
+    private func bindViewModel() {
+        viewModel.stateChanger = { [weak self] state in
+            switch state {
+            case .loading:
+                ()
+            case .loaded:
+                ()
+            }
+        }
+    }
     
     private func addSubviews(){
         view.addSubview(tableView)

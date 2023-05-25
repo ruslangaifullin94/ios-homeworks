@@ -9,22 +9,12 @@ import UIKit
 
 final class FeedViewController: UIViewController {
     
-    private let feedModelService: FeedModelProtocol
+    private let feedViewModel: FeedViewModelProtocol
        
     private lazy var checkGuessButton = CustomButton(title: "Проверка", titleColor: .white, buttonAction: pressedButton)
 
     private lazy var secretWordField = CustomTextField(placeholder: "enter word")
    
-    
-   
-    init(feedModelService: FeedModelProtocol) {
-        self.feedModelService = feedModelService
-        super .init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,29 +22,35 @@ final class FeedViewController: UIViewController {
         view.addSubview(secretWordField)
         view.addSubview(checkGuessButton)
         setupConstrait()
-      
+        bindModel()
+    }
+    
+    init (feedViewModel: FeedViewModel) {
+        self.feedViewModel = feedViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func pressedButton() {
-        
-        feedModelService.check(secretWordField.text) { result in
-            switch result {
-            case .success(_):
-                print("слово ок")
-                self.colorCheck(self.secretWordField, .green)
-            case .failure(let error):
-                switch error {
-                case .noWord:
-                    print("введи слово то")
-                    self.colorCheck(self.secretWordField, .red)
-                case .uncorrectWord:
-                    print("Слово не правильное")
-                    self.colorCheck(self.secretWordField, .red)
-                }
-            }
-        }
+        feedViewModel.didTapCheckButton(secretWordField.text)
     }
     
+    private func bindModel() {
+        feedViewModel.stateChanger = { [weak self] state in
+            guard let self = self else {return}
+           switch state {
+           case .waiting:
+               ()
+           case .true:
+               self.colorCheck(self.secretWordField, .green)
+           case .false:
+               self.colorCheck(self.secretWordField, .red)
+           }
+        }
+    }
     
    private func colorCheck(_ textField: UITextField, _ color: UIColor) {
         textField.backgroundColor = color

@@ -30,8 +30,9 @@ final class ProfileCoordinator {
         #endif
         
         let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
-        let loginViewController = LogInViewController(userService: userService, coordinator: self)
-        loginViewController.loginDelegate = loginViewControllerDelegate
+        let loginViewModel = LoginViewModel(userService: userService, coordinator: self)
+        let loginViewController = LogInViewController(loginViewModel: loginViewModel)
+        loginViewModel.loginDelegate = loginViewControllerDelegate
         let navController = UINavigationController(rootViewController: loginViewController)
         navController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
         self.navigationController = navController

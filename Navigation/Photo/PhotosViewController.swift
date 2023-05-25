@@ -47,6 +47,7 @@ class PhotosViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
+        imagePublisherFacade.rechargeImageLibrary()
         imagePublisherFacade.removeSubscription(for: self)
     }
     
@@ -108,11 +109,8 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
 extension PhotosViewController: ImageLibrarySubscriber {
  
     func receive(images: [UIImage]) {
-        
-        for image in images {
-            imagePublisherFacade.rechargeImageLibrary()
-            newPhoto.append(image)
-        }
+    
+        newPhoto = images
         profilePhotoCollection.reloadData()
     }
 }

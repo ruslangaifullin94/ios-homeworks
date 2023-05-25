@@ -13,7 +13,6 @@ protocol ProfileViewModelProtocol: AnyObject {
     var currentUser: User { get }
     var stateChanger: ((ProfileViewModel.State) -> Void)? {get set}
     func didTapPhotoCollection()
-//    func getTickets()
 }
 
 final class ProfileViewModel {
@@ -21,6 +20,7 @@ final class ProfileViewModel {
     private let coordinator: ProfileCoordinatorProtocol
     var data: [Post]
     let currentUser: User
+    
     enum State {
         case loading
         case loaded
@@ -43,14 +43,9 @@ final class ProfileViewModel {
 
 extension ProfileViewModel: ProfileViewModelProtocol {
     
-//    func getTickets() {
-//        self.state = .loading
-//        let test: [Int] = []
-//        self.state = .loaded(tickets: test)
-//    }
-    
     func didTapPhotoCollection() {
         coordinator.pushPhotoViewController(photos: [])
+        state = .loaded
     }
 
 }

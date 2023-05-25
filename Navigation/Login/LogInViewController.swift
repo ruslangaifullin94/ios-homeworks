@@ -12,16 +12,8 @@ import UIKit
 final class LogInViewController: UIViewController {
     
     // MARK: - Properties
-    #if DEBUG
-    private var userService: TestUserService
-
-    #else
-    private var userService: CurrentUserService
-
-    #endif
-    private let coordinator: ProfileCoordinatorProtocol
     
-    var loginDelegate: LoginViewControllerDelegate?
+    private let loginViewModel: LoginViewModelProtocol
     
     private lazy var logInButton = CustomButton(title: "Log In", titleColor: .white, buttonAction: logIn)
     
@@ -78,22 +70,12 @@ final class LogInViewController: UIViewController {
     }()
     
     //MARK: - LifeCycle
- 
-    #if DEBUG
-    init(userService: TestUserService, coordinator: ProfileCoordinatorProtocol) {
-        self.userService = userService
-        self.coordinator = coordinator
-        super.init(nibName: nil, bundle: nil)
-    }
     
-    #else
-    init(userService: CurrentUserService, coordinator: ProfileCoordinatorProtocol) {
-        self.userService = userService
-        self.coordinator = coordinator
-        super.init(nibName: nil, bundle: nil)
-    }
-    #endif
-    
+    init(loginViewModel: LoginViewModel) {
+            self.loginViewModel = loginViewModel
+            super.init(nibName: nil, bundle: nil)
+        }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -105,6 +87,7 @@ final class LogInViewController: UIViewController {
         scrollView.addSubview(contentView)
         setupContentOfScrollView()
         setupConstraits()
+        bindLoginModel()
         self.navigationController?.isNavigationBarHidden = true
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -133,30 +116,21 @@ final class LogInViewController: UIViewController {
         scrollView.contentOffset = CGPoint(x: 0, y: 0)
         }
     private func logIn() {
-        
-        guard let loginDelegate = self.loginDelegate else {return}
-        switch self.userService.logInToUser(login.text) {
-        case .success(let user):
-            
-            switch loginDelegate.check(user.userLogin, password.text!) {
-                
-            case .failure(let error):
-                switch error {
-                case .wrongLogin:
-                    print("login off")
-                    presentAlert(error.errorDescription)
-                case .wrongPass:
-                    print("pass off")
-                    presentAlert(error.errorDescription)
-                }
-            case .success(_):
-                coordinator.pushProfileViewController(currentUser: user)
-            }
-
-        case .failure(let error):
-            switch error {
-            case .wrongLogin:
-                presentAlert("Логин не найден. Повторите ввод.")
+        loginViewModel.loginCheck(login.text, password.text)
+    }
+    
+    private func bindLoginModel() {
+        loginViewModel.stateChanger = { [weak self] state in
+            guard let self = self else {return}
+            switch state {
+            case .logout:
+                ()
+            case .login:
+                ()
+            case .unCorrectPass:
+                self.presentAlert("Неверный пароль")
+            case .unCorrectLogin:
+                self.presentAlert("Неверный логин")
             }
         }
     }
