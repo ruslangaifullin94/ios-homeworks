@@ -8,6 +8,7 @@
 import Foundation
 
 protocol LoginViewModelProtocol: AnyObject {
+    
     #if DEBUG
     var userService: TestUserService { get }
 
@@ -23,6 +24,10 @@ protocol LoginViewModelProtocol: AnyObject {
 
 
 final class LoginViewModel {
+    
+    
+    //MARK: - Properties
+    
     #if DEBUG
     internal var userService: TestUserService
 
@@ -30,15 +35,14 @@ final class LoginViewModel {
     internal var userService: CurrentUserService
 
     #endif
-    internal let coordinator: ProfileCoordinatorProtocol
+    internal let coordinator: LoginCoordinatorProtocol
 
     var loginDelegate: LoginViewControllerDelegate?
     
     enum State {
         case logout
         case login
-        case unCorrectPass
-        case unCorrectLogin
+        case wrong(text: String)
         
     }
     
@@ -49,14 +53,18 @@ final class LoginViewModel {
             self.stateChanger?(state)
         }
     }
+    
+    
+    //MARK: - Life Cycles
+    
     #if DEBUG
-    init(userService: TestUserService, coordinator: ProfileCoordinatorProtocol) {
+    init(userService: TestUserService, coordinator: LoginCoordinator) {
         self.userService = userService
         self.coordinator = coordinator
     }
 
     #else
-    init(userService: CurrentUserService, coordinator: ProfileCoordinatorProtocol) {
+    init(userService: CurrentUserService, coordinator: LoginCoordinator) {
         self.userService = userService
         self.coordinator = coordinator
     }
@@ -66,6 +74,10 @@ final class LoginViewModel {
     
     
 }
+
+
+
+//MARK: - LoginViewModelProtocol
 
 extension LoginViewModel: LoginViewModelProtocol {
     
@@ -77,23 +89,16 @@ extension LoginViewModel: LoginViewModelProtocol {
             switch loginDelegate.check(user.userLogin, password!) {
                 
             case .failure(let error):
-                switch error {
-                case .wrongLogin:
-                    print("login off")
-                    state = .unCorrectLogin
-                case .wrongPass:
-                    print("pass off")
-                    state = .unCorrectPass
-                }
+                state = .wrong(text: error.errorDescription)
             case .success(_):
-                coordinator.pushProfileViewController(currentUser: user)
+                coordinator.switchToNextFlow(currentUser: user)
                 state = .login
             }
 
         case .failure(let error):
             switch error {
             case .wrongLogin:
-                state = .unCorrectLogin
+                state =  .wrong(text: error.errorDescription)
             }
         }
     }

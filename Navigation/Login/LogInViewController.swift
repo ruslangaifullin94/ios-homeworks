@@ -11,7 +11,7 @@ import UIKit
 
 final class LogInViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: - Private Properties
     
     private let loginViewModel: LoginViewModelProtocol
     
@@ -69,6 +69,8 @@ final class LogInViewController: UIViewController {
         return stack
     }()
     
+    
+    
     //MARK: - LifeCycle
     
     init(loginViewModel: LoginViewModel) {
@@ -88,6 +90,7 @@ final class LogInViewController: UIViewController {
         setupContentOfScrollView()
         setupConstraits()
         bindLoginModel()
+     
         self.navigationController?.isNavigationBarHidden = true
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -100,7 +103,7 @@ final class LogInViewController: UIViewController {
         removeKeyboardObservers()
     }
     
-//MARK: - Metods
+//MARK: - Private Methods
     
     @objc func willShowKeyboard(_ notification: NSNotification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -115,6 +118,7 @@ final class LogInViewController: UIViewController {
     @objc func willHideKeyboard(_ notification: NSNotification) {
         scrollView.contentOffset = CGPoint(x: 0, y: 0)
         }
+  
     private func logIn() {
         loginViewModel.loginCheck(login.text, password.text)
     }
@@ -127,10 +131,8 @@ final class LogInViewController: UIViewController {
                 ()
             case .login:
                 ()
-            case .unCorrectPass:
-                self.presentAlert("Неверный пароль")
-            case .unCorrectLogin:
-                self.presentAlert("Неверный логин")
+            case .wrong(let text):
+                self.presentAlert(text)
             }
         }
     }
@@ -166,11 +168,13 @@ final class LogInViewController: UIViewController {
                 ])
         contentView.subviews.last?.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     }
+    
     private func setupContentOfScrollView() {
         contentView.addSubview(logo)
         contentView.addSubview(logInStack)
         contentView.addSubview(logInButton)
     }
+    
     private func setupKeybordsObservers() {
         let notificationCenter = NotificationCenter.default
        
@@ -195,7 +199,10 @@ final class LogInViewController: UIViewController {
         notificationCenter.removeObserver(self)
     }
 }
-//MARK: - Extensions
+
+
+
+//MARK: - UITextFieldDelegate
 
 extension LogInViewController: UITextFieldDelegate {
     
@@ -209,6 +216,9 @@ extension LogInViewController: UITextFieldDelegate {
         return true
     }
 }
+
+
+//MARK: - LogInViewController
 
 extension LogInViewController {
     func presentAlert(_ error: String) {

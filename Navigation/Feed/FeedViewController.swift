@@ -9,12 +9,25 @@ import UIKit
 
 final class FeedViewController: UIViewController {
     
+    //MARK: - Private Propeties
+    
     private let feedViewModel: FeedViewModelProtocol
        
     private lazy var checkGuessButton = CustomButton(title: "Проверка", titleColor: .white, buttonAction: pressedButton)
 
     private lazy var secretWordField = CustomTextField(placeholder: "enter word")
    
+    
+    //MARK: - LifeCycles
+    
+    init (feedViewModel: FeedViewModel) {
+        self.feedViewModel = feedViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,14 +38,7 @@ final class FeedViewController: UIViewController {
         bindModel()
     }
     
-    init (feedViewModel: FeedViewModel) {
-        self.feedViewModel = feedViewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+   //MARK: - Methods
     
     private func pressedButton() {
         feedViewModel.didTapCheckButton(secretWordField.text)

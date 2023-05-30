@@ -88,7 +88,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }()
    
     
-    //MARK: - Public Metod
+    //MARK: - Public Method
     
     func setupUser(_ user: User) {
         self.currentUser = user
@@ -98,7 +98,24 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         
     }
     
-    //MARK: - Metods
+    
+    
+    //MARK: - LifeCycles
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        
+        setupUI()
+        setupGestureRecognizer()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
+    //MARK: - Private Methods
     
     private func setupGestureRecognizer() {
         let tapGesturePhoto = UITapGestureRecognizer(target: self, action: #selector(didTapPhotoAlert))
@@ -144,18 +161,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
         didTapSetButton()
     }
     
-    
-    
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        
-        setupUI()
-        setupGestureRecognizer()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     private func setupUI() {
         addSubview(nameLabel)
         addSubview(statusButton)
@@ -196,7 +201,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-//MARK: - Extensions
+//MARK: - UITextFieldDelegate
 
 extension ProfileHeaderView: UITextFieldDelegate {
     

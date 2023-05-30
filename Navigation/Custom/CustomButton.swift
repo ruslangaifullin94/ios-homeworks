@@ -9,8 +9,11 @@ import UIKit
 
 final class CustomButton: UIButton {
     
-    
+    //MARK: - CallBack
     private var buttonAction: () -> Void
+    
+    
+    //MARK: - Life Cycles
     
     init(title: String, titleColor: UIColor, buttonAction: @escaping () -> Void) {
         self.buttonAction = buttonAction
@@ -29,6 +32,8 @@ final class CustomButton: UIButton {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: - @objc Methods
     
     @objc private func didTapButton() {
         self.buttonAction()

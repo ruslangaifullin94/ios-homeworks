@@ -9,6 +9,8 @@ import UIKit
 
 class PhotoTableViewCell: UITableViewCell {
     
+    //MARK: - Private Properties
+    
     fileprivate let photo = Photo.make()
         
     private lazy var photoLabel: UILabel = {
@@ -44,6 +46,9 @@ class PhotoTableViewCell: UITableViewCell {
     }()
     
     
+    //MARK: - Life Cycles
+    
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
         setupConstrait()
@@ -52,6 +57,9 @@ class PhotoTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    //MARK: - Private Methods
     
     private func setupConstrait() {
         contentView.addSubview(photoLabel)
@@ -72,25 +80,15 @@ class PhotoTableViewCell: UITableViewCell {
         
         ])
     }
-  
-    
 }
 
-extension PhotoTableViewCell: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+
+//MARK: - UICollectionViewDelegateFlowLayout
+
+extension PhotoTableViewCell: UICollectionViewDelegateFlowLayout {
     
     private var sideInset: CGFloat {
         return 8
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        photo.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellReuseID.photo.rawValue, for: indexPath) as? PhotoCollectionViewCell else {return UICollectionViewCell()}
-        let model = photo[indexPath.row]
-        cell.setupCollectionTableCell(with: model)
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -106,6 +104,22 @@ extension PhotoTableViewCell: UICollectionViewDelegateFlowLayout, UICollectionVi
         sideInset
     }
     
+}
+
+
+
+//MARK: - UICollectionViewDataSource
+
+extension PhotoTableViewCell: UICollectionViewDataSource {
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        photo.count
+    }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellReuseID.photo.rawValue, for: indexPath) as? PhotoCollectionViewCell else {return UICollectionViewCell()}
+        let model = photo[indexPath.row]
+        cell.setupCollectionTableCell(with: model)
+        return cell
+    }
 }

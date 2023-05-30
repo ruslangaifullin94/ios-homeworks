@@ -13,9 +13,12 @@ protocol ProfileViewModelProtocol: AnyObject {
     var currentUser: User { get }
     var stateChanger: ((ProfileViewModel.State) -> Void)? {get set}
     func didTapPhotoCollection()
+    func pushSettingsController()
 }
 
 final class ProfileViewModel {
+    
+    //MARK: - Private Properties
     
     private let coordinator: ProfileCoordinatorProtocol
     var data: [Post]
@@ -25,7 +28,7 @@ final class ProfileViewModel {
         case loading
         case loaded
     }
-    
+        
     var stateChanger: ((State) -> Void)?
     
     private var state: State = .loading {
@@ -34,6 +37,9 @@ final class ProfileViewModel {
         }
     }
     
+    
+    //MARK: - Life Cycles
+    
     init(data: [Post], currentUser: User, coordinator: ProfileCoordinatorProtocol) {
         self.data = data
         self.currentUser = currentUser
@@ -41,11 +47,19 @@ final class ProfileViewModel {
     }
 }
 
+
+
+//MARK: - ProfileViewModelProtocol
+
 extension ProfileViewModel: ProfileViewModelProtocol {
     
     func didTapPhotoCollection() {
         coordinator.pushPhotoViewController(photos: [])
         state = .loaded
+    }
+    
+    func pushSettingsController() {
+        coordinator.pushSettingsViewController()
     }
 
 }

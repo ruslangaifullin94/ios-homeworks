@@ -8,6 +8,8 @@
 import UIKit
 
 final class CustomTextField: UITextField {
+    
+    //MARK: - Life Cycles
 
     init(placeholder: String) {
         super.init(frame: .zero)

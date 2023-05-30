@@ -6,12 +6,14 @@
 //
 
 import UIKit
-import iOSIntPackage
-
 class PhotosViewController: UIViewController {
     
-    let imagePublisherFacade = ImagePublisherFacade()
-    var newPhoto: [UIImage] = []
+    //MARK: - Properties
+    
+    private let viewModel: PhotoViewModelProtocol?
+    
+//    private let imagePublisherFacade = ImagePublisherFacade()
+    private var newPhoto: [UIImage] = []
 //    fileprivate var photo = Photo.make()
 
     private lazy var profilePhotoCollection: UICollectionView = {
@@ -30,13 +32,21 @@ class PhotosViewController: UIViewController {
     }()
     
    
-   
+   //MARK: - Life Cycles
+    
+    init(viewModel: PhotoViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        imagePublisherFacade.subscribe(self)
-        imagePublisherFacade.addImagesWithTimer(time: 0.5, repeat: 20, userImages: newPhotoAlbum)
+        bindModel()
     }
     
     override func viewWillLayoutSubviews() {
@@ -47,12 +57,15 @@ class PhotosViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        imagePublisherFacade.rechargeImageLibrary()
-        imagePublisherFacade.removeSubscription(for: self)
+//        imagePublisherFacade.rechargeImageLibrary()
+//        imagePublisherFacade.removeSubscription(for: self)
     }
+    
+    //MARK: - Methods
     
     private func setupView() {
         view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "photo.fill.on.rectangle.fill"), style: .plain, target: self, action: #selector(setupFilters))
     }
     
     private func setupConstraits() {
@@ -70,24 +83,33 @@ class PhotosViewController: UIViewController {
         
     }
     
+    private func bindModel() {
+        viewModel?.stateChanger = { [weak self] state in
+            guard let self = self else {return}
+            switch state {
+            case .filterOff:
+                ()
+            case .filterON:
+                self.profilePhotoCollection.reloadData()
+            }
+            
+        }
+    }
+    
+    
+    @objc private func setupFilters() {
+        viewModel?.setupFiltersInCollection()
+
+    }
+    
 }
 
-extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//MARK: - UICollectionViewDelegateFlowLayout
+
+extension PhotosViewController: UICollectionViewDelegateFlowLayout {
     
     private var sideInset: CGFloat {
         return 8
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        newPhoto.count
-        
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellReuseID.photoCollection.rawValue, for: indexPath) as? PhotoCollectionViewCell else {return UICollectionViewCell()}
-        let model = newPhoto[indexPath.item]
-        cell.setupCollectionCell(with: model)
-        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -103,14 +125,22 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
         sideInset
     }
     
-
 }
 
-extension PhotosViewController: ImageLibrarySubscriber {
- 
-    func receive(images: [UIImage]) {
+//MARK: - UICollectionViewDataSource
+
+extension PhotosViewController: UICollectionViewDataSource {
     
-        newPhoto = images
-        profilePhotoCollection.reloadData()
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        newPhotoAlbum.count
+        
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellReuseID.photoCollection.rawValue, for: indexPath) as? PhotoCollectionViewCell else {return UICollectionViewCell()}
+        let model = newPhotoAlbum[indexPath.item]
+        cell.setupCollectionCell(with: model)
+        return cell
     }
 }
+

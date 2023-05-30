@@ -15,11 +15,10 @@ protocol ProfileViewControllerDelegate: AnyObject {
 
 final class ProfileViewController: UIViewController {
    
+    
     //MARK: - Properties
+    
     private let viewModel: ProfileViewModelProtocol
-    
-//    private let currentUser: User
-    
     
     private var pointOnPhoto: CGPoint?
     private var profileAvatar: UIImageView?
@@ -53,7 +52,6 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.isNavigationBarHidden = true
         addSubviews()
         setupView()
         tuneTableView()
@@ -61,16 +59,13 @@ final class ProfileViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        navigationController?.isNavigationBarHidden = false
        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = true
-    }
     
-    
-    
-    //MARK: - Metods
+    //MARK: - Private Methods
     
     private func bindViewModel() {
         viewModel.stateChanger = { [weak self] state in
@@ -89,6 +84,9 @@ final class ProfileViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: #selector(didTapSettingsButton))
+        title = viewModel.currentUser.userName
+
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 0),
@@ -114,20 +112,18 @@ final class ProfileViewController: UIViewController {
     }
     
     
-}
-
-//MARK: Extensions
-
-extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 180
-        } else {
-            return UITableView.automaticDimension
-        }
+    @objc private func didTapSettingsButton() {
+        viewModel.pushSettingsController()
     }
     
+}
+
+
+
+//MARK: - UITableViewDataSource
+
+extension ProfileViewController: UITableViewDataSource {
+
     func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
@@ -139,15 +135,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             return viewModel.data.count
         }
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        if indexPath.section == 0 {
-            self.viewModel.didTapPhotoCollection()
-        }
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
@@ -164,8 +152,36 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         }
     }
-
 }
+
+
+
+//MARK: - UITableViewDelegate
+
+extension ProfileViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 180
+        } else {
+            return UITableView.automaticDimension
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        if indexPath.section == 0 {
+            self.viewModel.didTapPhotoCollection()
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    
+}
+
+
+//MARK: - ProfileViewControllerDelegate
+
 extension ProfileViewController: ProfileViewControllerDelegate {
    
     

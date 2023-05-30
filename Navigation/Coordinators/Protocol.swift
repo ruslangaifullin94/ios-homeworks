@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CoordinatorProtocol {
+protocol CoordinatorProtocol: AnyObject {
     func start() -> UIViewController
 }
 

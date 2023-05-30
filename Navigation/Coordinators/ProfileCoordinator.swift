@@ -7,68 +7,84 @@
 
 import UIKit
 
-protocol ProfileCoordinatorProtocol {
-    func pushProfileViewController(currentUser: User)
+protocol ProfileCoordinatorProtocol: AnyObject {
     func pushPhotoViewController(photos: [UIImage])
+    func pushSettingsViewController()
+    func logoutProfile()
 }
 
 final class ProfileCoordinator {
     
+    //MARK: - Private Properties
+    
+    private let currentUser: User
+    
     private var navigationController: UINavigationController
     
+    private weak var parentCoordinator: TabBarCoordinatorProtocol?
     
-    init(navigationController: UINavigationController) {
+    
+    //MARK: - Life Cycle
+    
+    init(navigationController: UINavigationController, parentCoordinator: TabBarCoordinatorProtocol?, currentUser: User) {
         self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
+        self.currentUser = currentUser
     }
     
-    private func createLogin() -> UIViewController {
-        
-        #if DEBUG
-        let userService = TestUserService()
-        #else
-        let userService = CurrentUserService()
-        #endif
-        
-        let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
-        let loginViewModel = LoginViewModel(userService: userService, coordinator: self)
-        let loginViewController = LogInViewController(loginViewModel: loginViewModel)
-        loginViewModel.loginDelegate = loginViewControllerDelegate
-        let navController = UINavigationController(rootViewController: loginViewController)
-        navController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
-        self.navigationController = navController
-        return navController
-    }
+    
+    //MARK: - Private Methods
     
     private func createProfile(currentUser: User) -> UIViewController {
         let data = Post.make()
         let viewModel = ProfileViewModel(data: data, currentUser: currentUser, coordinator: self)
         let profileViewController = ProfileViewController(viewModel: viewModel)
+        let navController = UINavigationController(rootViewController: profileViewController)
+        navController.tabBarItem = UITabBarItem(title: "Профиль", image: UIImage(systemName: "person.circle"), tag: 1)
+        self.navigationController = navController
+        return navigationController
+    }
+    
+}
+
+
+
+//MARK: - CoordinatorProtocol
+
+extension ProfileCoordinator: CoordinatorProtocol {
+    func start() -> UIViewController {
+        let profileViewController = self.createProfile(currentUser: currentUser)
         return profileViewController
     }
     
 }
 
-extension ProfileCoordinator: CoordinatorProtocol {
-    func start() -> UIViewController {
-        let loginViewController = createLogin()
-        return loginViewController
-    }
-    
-    
-}
+
+
+//MARK: - ProfileCoordinatorProtocol
 
 extension ProfileCoordinator: ProfileCoordinatorProtocol {
     
-    func pushProfileViewController(currentUser: User) {
-        let profileViewController = self.createProfile(currentUser: currentUser)
-        self.navigationController.pushViewController(profileViewController, animated: true)
-
+    func pushPhotoViewController(photos: [UIImage]) {
+        print("ok")
+        let photoViewModel = PhotoViewModel()
+        let photosViewController = PhotosViewController(viewModel: photoViewModel)
+        photosViewController.title = "Profile Photo"
+        navigationController.pushViewController(photosViewController, animated: true)
     }
     
-    func pushPhotoViewController(photos: [UIImage]) {
-        let photosViewController = PhotosViewController()
-        photosViewController.title = "Profile Photo"
-        self.navigationController.pushViewController(photosViewController, animated: true)
+    func pushSettingsViewController() {
+        let settingsViewModel = SettingsViewModel(coordinator: self)
+        let settingsViewController = SettingsViewController(viewModel: settingsViewModel)
+        settingsViewController.modalPresentationStyle = .pageSheet
+        settingsViewController.modalTransitionStyle = .coverVertical
+        settingsViewController.view.backgroundColor = .systemBackground
+        navigationController.present(settingsViewController, animated: true)
+    }
+    
+    
+    func logoutProfile() {
+        parentCoordinator?.switchToNextFlow()
     }
     
     

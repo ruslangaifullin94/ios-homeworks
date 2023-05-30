@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
-        let mainCoordinator = MainCoordinator()
+        let rootViewController = UIViewController()
+        let mainCoordinator = MainCoordinator(rootViewController: rootViewController)
         window.rootViewController = mainCoordinator.start()
         window.makeKeyAndVisible()
         createPhotosArray()

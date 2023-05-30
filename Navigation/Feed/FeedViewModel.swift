@@ -14,6 +14,8 @@ protocol FeedViewModelProtocol: AnyObject {
 
 final class FeedViewModel {
     
+    //MARK: - Properties
+    
     var stateChanger: ((State) -> Void)?
     
     private let feedModelService: FeedModelProtocol
@@ -29,12 +31,18 @@ final class FeedViewModel {
             self.stateChanger?(state)
         }
     }
+    
+    //MARK: - Life Cycles
         
     init(feedModelService: FeedModelProtocol) {
         self.feedModelService = feedModelService
     }
     
 }
+
+
+
+//MARK: - FeedViewModelProtocol
 
 extension FeedViewModel: FeedViewModelProtocol {
     func didTapCheckButton(_ word: String?) {
