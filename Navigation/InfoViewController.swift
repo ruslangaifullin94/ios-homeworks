@@ -15,6 +15,8 @@ class InfoViewController: UIViewController, UIAlertViewDelegate {
             button.translatesAutoresizingMaskIntoConstraints = false
             return button
         }()
+    
+    
     @objc private func didTapAlertButton() {
             let alert = UIAlertController(title: "Hello", message: "Are you ok?", preferredStyle: .alert)
             let okAction = UIAlertAction(title: "Yes", style: .default) {
@@ -29,6 +31,7 @@ class InfoViewController: UIViewController, UIAlertViewDelegate {
             alert.addAction(okAction)
             present(alert, animated: true)
         }
+    
     fileprivate func setupConstraints(){
         let safeAreaLayoutGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([

@@ -13,17 +13,17 @@ struct User {
     var userName: String
     var userStatus: String
     var password: String
-//    init(userLogin: String, userAvatar: UIImage?, userName: String, userStatus: String) {
-//        self.userLogin = userLogin
-//        self.userAvatar = userAvatar
-//        self.userName = userName
-//        self.userStatus = userStatus
-//    }
 }
 
 enum UserServiceError: Error {
     case wrongLogin
-//    case wrongPassword
+    
+    var errorDescription: String {
+        switch self {
+        case .wrongLogin:
+            return "Неправильный логин"
+        }
+    }
 }
 protocol UserService {
     func logInToUser(_ userLogin: String?) -> Result<User, UserServiceError>

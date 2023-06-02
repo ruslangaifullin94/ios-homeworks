@@ -13,13 +13,12 @@ protocol ProfileViewControllerDelegate: AnyObject {
     func closePhoto(image: UIImageView)
 }
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
    
+    
     //MARK: - Properties
     
-    private let currentUser: User
-    
-    fileprivate let data = Post.make()
+    private let viewModel: ProfileViewModelProtocol
     
     private var pointOnPhoto: CGPoint?
     private var profileAvatar: UIImageView?
@@ -35,15 +34,15 @@ class ProfileViewController: UIViewController {
    private lazy var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
        
-       headerView.setupUser(self.currentUser)
+       headerView.setupUser(self.viewModel.currentUser)
         headerView.delegate = self
        return headerView
     }()
     
     //MARK: - LifeCycle
     
-    init(currentUser: User) {
-        self.currentUser = currentUser
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,23 +52,31 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.isNavigationBarHidden = true
-       
-    }
-    
-    override func viewWillLayoutSubviews() {
         addSubviews()
         setupView()
         tuneTableView()
+        bindViewModel()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.isNavigationBarHidden = true
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        navigationController?.isNavigationBarHidden = false
+       
     }
     
     
+    //MARK: - Private Methods
     
-    //MARK: - Metods
+    private func bindViewModel() {
+        viewModel.stateChanger = { [weak self] state in
+            switch state {
+            case .loading:
+                ()
+            case .loaded:
+                ()
+            }
+        }
+    }
     
     private func addSubviews(){
         view.addSubview(tableView)
@@ -77,6 +84,9 @@ class ProfileViewController: UIViewController {
     
     private func setupView() {
         view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: #selector(didTapSettingsButton))
+        title = viewModel.currentUser.userName
+
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 0),
@@ -102,20 +112,18 @@ class ProfileViewController: UIViewController {
     }
     
     
-}
-
-//MARK: Extensions
-
-extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 180
-        } else {
-            return UITableView.automaticDimension
-        }
+    @objc private func didTapSettingsButton() {
+        viewModel.pushSettingsController()
     }
     
+}
+
+
+
+//MARK: - UITableViewDataSource
+
+extension ProfileViewController: UITableViewDataSource {
+
     func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
@@ -124,20 +132,10 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         if section == 0 {
             return 1
         } else {
-            return data.count
+            return viewModel.data.count
         }
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        if indexPath.section == 0 {
-            let photosViewController = PhotosViewController()
-            photosViewController.title = "Profile Photo"
-            tableView.deselectRow(at: indexPath, animated: false)
-            self.navigationController?.pushViewController(photosViewController, animated: true)
-        }
-    }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
@@ -150,12 +148,40 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseID.base.rawValue, for: indexPath) as? PostTableViewCell else {
                 fatalError("could not dequeueReusableCell")
             }
-            cell.update(data[indexPath.row])
+            cell.update(viewModel.data[indexPath.row])
             return cell
         }
     }
-
 }
+
+
+
+//MARK: - UITableViewDelegate
+
+extension ProfileViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 180
+        } else {
+            return UITableView.automaticDimension
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        if indexPath.section == 0 {
+            self.viewModel.didTapPhotoCollection()
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    
+}
+
+
+//MARK: - ProfileViewControllerDelegate
+
 extension ProfileViewController: ProfileViewControllerDelegate {
    
     

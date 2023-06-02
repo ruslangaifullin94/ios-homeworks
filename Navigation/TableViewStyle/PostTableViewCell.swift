@@ -7,9 +7,9 @@
 
 import UIKit
 
-class PostTableViewCell: UITableViewCell {
+final class PostTableViewCell: UITableViewCell {
     
-    //MARK: - Properties of Cells
+    //MARK: - Private Properties
     
     private let authorLabel: UILabel = {
         let label = UILabel()
@@ -54,7 +54,7 @@ class PostTableViewCell: UITableViewCell {
         return description
     }()
     
-    //MARK: - Settings for Cells
+    //MARK: - Life Cycles
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
@@ -71,6 +71,10 @@ class PostTableViewCell: UITableViewCell {
         isSelected = false
         isHighlighted = false
     }
+    
+    
+    //MARK: - Private Methods
+    
     private func tuneView() {
         addSubview(authorLabel)
         addSubview(picOfPost)
@@ -104,6 +108,8 @@ class PostTableViewCell: UITableViewCell {
         ])
         
     }
+    
+    //MARK: - Public Methods
     
     func update (_ model: Post) {
         authorLabel.text = model.author

@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import iOSIntPackage
 
 class PhotoCollectionViewCell: UICollectionViewCell {
+    
+    //MARK: - Private Properties
     
     var photo: Photo?
     
@@ -16,11 +19,11 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             image.translatesAutoresizingMaskIntoConstraints = false
             image.clipsToBounds = true
             image.layer.cornerRadius = 6
-        
             return image
         }()
         
-        
+    //MARK: - Life Cycles
+    
         override init(frame: CGRect) {
             super.init(frame: .zero)
             setupConstraits()
@@ -30,13 +33,15 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             fatalError("init(coder:) has not been implemented")
         }
         
+    
+    //MARK: - Private Methods
+    
         func setupCollectionTableCell(with photo: Photo) {
             self.photo = photo
             imageCollectionCell.image = UIImage(named: photo.imageTitle)
         }
     
         func setupCollectionCell(with image: UIImage) {
-//        self.photo = photo
         imageCollectionCell.image = image
         }
         
