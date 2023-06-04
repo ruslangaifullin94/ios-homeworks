@@ -35,7 +35,7 @@ internal var userData: [User] = [
     User(userLogin: "cat", userAvatar: UIImage(named: "cat"), userName: "Cat Lucy", userStatus: "I love sleep", password: "catcat")
 ]
 
-class CurrentUserService: UserService {
+final class CurrentUserService: UserService {
  
     func logInToUser(_ userLogin: String?) -> Result<User, UserServiceError> {
         if let index = userData.firstIndex(where: {$0.userLogin == userLogin}) {
@@ -51,7 +51,7 @@ class CurrentUserService: UserService {
     
 }
 
-class TestUserService: UserService {
+final class TestUserService: UserService {
     
     let userCat = User(
         userLogin: "cat",

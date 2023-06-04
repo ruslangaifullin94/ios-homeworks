@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PhotoTableViewCell: UITableViewCell {
+final class PhotoTableViewCell: UITableViewCell {
     
     //MARK: - Private Properties
     

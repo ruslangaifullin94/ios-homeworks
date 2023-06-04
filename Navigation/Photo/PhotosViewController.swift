@@ -6,7 +6,8 @@
 //
 
 import UIKit
-class PhotosViewController: UIViewController {
+
+final class PhotosViewController: UIViewController {
     
     //MARK: - Properties
     

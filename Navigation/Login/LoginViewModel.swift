@@ -19,6 +19,7 @@ protocol LoginViewModelProtocol: AnyObject {
     var stateChanger: ((LoginViewModel.State) -> Void)? { get set}
 
     func loginCheck(_ login: String?,_ password: String?)
+    func passGenerate()
 }
 
 
@@ -42,6 +43,8 @@ final class LoginViewModel {
     enum State {
         case logout
         case login
+        case passGenerateStart
+        case passGenerateFinish(pass: String)
         case wrong(text: String)
         
     }
@@ -101,5 +104,27 @@ extension LoginViewModel: LoginViewModelProtocol {
                 state =  .wrong(text: error.errorDescription)
             }
         }
+    }
+    
+    func passGenerate() {
+        
+        state = .passGenerateStart
+        
+         GeneratePassword.shared.generatePassword(length: 40000) { newPass in
+             
+             let group = DispatchGroup()
+             var resultPass = ""
+            for char in newPass {
+                group.enter()
+                 BruteForce.shared.bruteForcePublic(passwordToUnlock: String(char)) { letter in
+                     resultPass.append(letter)
+                     group.leave()
+                 }
+             }
+             let workItem = DispatchWorkItem { [self] in
+                 state = .passGenerateFinish(pass: resultPass)
+             }
+             group.notify(queue: DispatchQueue.main, work: workItem)
+         }
     }
 }

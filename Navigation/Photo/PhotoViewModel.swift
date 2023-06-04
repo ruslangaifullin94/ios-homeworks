@@ -13,7 +13,10 @@ protocol PhotoViewModelProtocol: AnyObject {
     var stateChanger: ((PhotoViewModel.State) -> Void)? { get set}
 }
 
-class PhotoViewModel {
+final class PhotoViewModel {
+    
+    //MARK: - Properties
+    
     let imageProcessor = ImageProcessor()
     enum State {
         case filterOff
@@ -28,6 +31,10 @@ class PhotoViewModel {
     }
 }
 
+
+
+//MARK: - PhotoViewModelProtocol
+
 extension PhotoViewModel: PhotoViewModelProtocol {
     func setupFiltersInCollection() {
         
@@ -36,7 +43,7 @@ extension PhotoViewModel: PhotoViewModelProtocol {
         imageProcessor.processImagesOnThread(
             sourceImages: newPhotoAlbum,
             filter: .colorInvert,
-            qos: .utility) {
+            qos: .userInitiated) {
                 images in
             
             DispatchQueue.main.async {
