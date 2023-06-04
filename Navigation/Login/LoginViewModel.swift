@@ -109,7 +109,7 @@ extension LoginViewModel: LoginViewModelProtocol {
     func passGenerate() {
         
         state = .passGenerateStart
-        
+        let start = Date()
          GeneratePassword.shared.generatePassword(length: 40000) { newPass in
              
              let group = DispatchGroup()
@@ -122,6 +122,9 @@ extension LoginViewModel: LoginViewModelProtocol {
                  }
              }
              let workItem = DispatchWorkItem { [self] in
+                 let finish = Date()
+                 let timer = finish.timeIntervalSince(start)
+                 print(timer)
                  state = .passGenerateFinish(pass: resultPass)
              }
              group.notify(queue: DispatchQueue.main, work: workItem)
