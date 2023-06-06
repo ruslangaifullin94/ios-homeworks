@@ -64,7 +64,7 @@ final class MainCoordinator {
             from: rootViewController.children[0],
             to: newViewController,
             duration: 0.6,
-            options: [.transitionCrossDissolve, .curveEaseOut],
+            options: [.transitionFlipFromRight],
             animations: {}
         ) {_ in
             self.rootViewController.children[0].removeFromParent()

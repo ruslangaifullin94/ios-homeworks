@@ -16,6 +16,7 @@ final class LogInViewController: UIViewController {
     private let loginViewModel: LoginViewModelProtocol
     
     private lazy var logInButton = CustomButton(title: "Log In", titleColor: .white, buttonAction: logIn)
+    private lazy var brutForceButton = CustomButton(title: "Generate Password", titleColor: .white, buttonAction: generatePassword)
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -69,6 +70,11 @@ final class LogInViewController: UIViewController {
         return stack
     }()
     
+    private lazy var indicator: UIActivityIndicatorView = {
+       let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
     
     
     //MARK: - LifeCycle
@@ -123,6 +129,13 @@ final class LogInViewController: UIViewController {
         loginViewModel.loginCheck(login.text, password.text)
     }
     
+    private func generatePassword() {
+
+        loginViewModel.passGenerate()
+       
+        
+    }
+    
     private func bindLoginModel() {
         loginViewModel.stateChanger = { [weak self] state in
             guard let self = self else {return}
@@ -133,6 +146,14 @@ final class LogInViewController: UIViewController {
                 ()
             case .wrong(let text):
                 self.presentAlert(text)
+            case .passGenerateStart:
+                indicator.startAnimating()
+                brutForceButton.isEnabled = false
+            case .passGenerateFinish(let resultPass):
+                password.text = resultPass
+                password.isSecureTextEntry = false
+                brutForceButton.isEnabled = true
+                indicator.stopAnimating()
             }
         }
     }
@@ -155,6 +176,16 @@ final class LogInViewController: UIViewController {
             logInButton.leftAnchor.constraint(equalTo: logInStack.leftAnchor, constant: 0),
             logInButton.heightAnchor.constraint(equalToConstant: 50),
             
+            indicator.centerYAnchor.constraint(equalTo: password.centerYAnchor),
+            indicator.rightAnchor.constraint(equalTo: password.rightAnchor, constant: -5),
+            indicator.widthAnchor.constraint(equalToConstant: 10),
+            indicator.heightAnchor.constraint(equalToConstant: 10),
+                                             
+            brutForceButton.topAnchor.constraint(equalTo: logInButton.bottomAnchor, constant: 16),
+            brutForceButton.rightAnchor.constraint(equalTo: logInButton.rightAnchor, constant: 0),
+            brutForceButton.leftAnchor.constraint(equalTo: logInButton.leftAnchor, constant: 0),
+            brutForceButton.heightAnchor.constraint(equalToConstant: 50),
+            
             scrollView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
@@ -172,7 +203,10 @@ final class LogInViewController: UIViewController {
     private func setupContentOfScrollView() {
         contentView.addSubview(logo)
         contentView.addSubview(logInStack)
+        contentView.addSubview(indicator)
         contentView.addSubview(logInButton)
+        contentView.addSubview(brutForceButton)
+        
     }
     
     private func setupKeybordsObservers() {
@@ -227,6 +261,6 @@ extension LogInViewController {
         optionMenu.addAction(optionAction)
         self.navigationController?.present(optionMenu, animated: true)
     }
+    
 }
-
 

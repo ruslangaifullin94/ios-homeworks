@@ -80,7 +80,15 @@ final class FeedViewController: UIViewController {
             checkGuessButton.widthAnchor.constraint(equalToConstant: 120)
         ])
     }
-    
+}
 
+
+
+//MARK: - Extension
+
+extension FeedViewController {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.secretWordField.endEditing(true)
+    }
 }
 

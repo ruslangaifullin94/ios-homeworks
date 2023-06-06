@@ -8,7 +8,7 @@
 import UIKit
 import iOSIntPackage
 
-class PhotoCollectionViewCell: UICollectionViewCell {
+final class PhotoCollectionViewCell: UICollectionViewCell {
     
     //MARK: - Private Properties
     

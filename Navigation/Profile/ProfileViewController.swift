@@ -33,7 +33,6 @@ final class ProfileViewController: UIViewController {
 
    private lazy var profileHeaderView: ProfileHeaderView  = {
         let headerView = ProfileHeaderView()
-       
        headerView.setupUser(self.viewModel.currentUser)
         headerView.delegate = self
        return headerView
@@ -123,6 +122,8 @@ final class ProfileViewController: UIViewController {
 //MARK: - UITableViewDataSource
 
 extension ProfileViewController: UITableViewDataSource {
+    
+    
 
     func numberOfSections(in tableView: UITableView) -> Int {
         2
@@ -159,6 +160,9 @@ extension ProfileViewController: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 
 extension ProfileViewController: UITableViewDelegate {
+    
+   
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {

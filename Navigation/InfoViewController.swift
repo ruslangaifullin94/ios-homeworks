@@ -7,7 +7,7 @@
 
 import UIKit
 
-class InfoViewController: UIViewController, UIAlertViewDelegate {
+final class InfoViewController: UIViewController, UIAlertViewDelegate {
     private lazy var alertButton: UIButton = {
             let button = UIButton()
             button.setTitle("Show Alert", for: .normal)
