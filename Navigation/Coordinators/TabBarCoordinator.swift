@@ -24,6 +24,9 @@ final class TabBarCoordinator {
     
     private var childCoordinators: [CoordinatorProtocol] = []
     
+    private var timer: Timer?
+    private var timerIsActive = true
+    
     
     //MARK: - Life Cycles
     
@@ -39,12 +42,35 @@ final class TabBarCoordinator {
     private func addChildCoordinator(coordinator: CoordinatorProtocol) {
         guard !self.childCoordinators.contains(where: {$0 === coordinator}) else {return}
         self.childCoordinators.append(coordinator)
-                
     }
     
     private func removeChildCoordinator(coordinator: CoordinatorProtocol) {
         self.childCoordinators.removeAll(where: {$0 === coordinator})
     }
+    
+    private func createTimer() {
+                
+        self.timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
+            let alert = UIAlertController(title: "Где подписка?", message: "Необходимо приобрести подписку", preferredStyle: .alert)
+            
+            let alertBuy = UIAlertAction(title: "Купить", style: .default) { _ in
+                self.timer?.invalidate()
+                
+            }
+            let alertNo = UIAlertAction(title: "No", style: .cancel) { _ in
+                self.createTimer()
+            }
+            
+            alert.addAction(alertBuy)
+            alert.addAction(alertNo)
+            
+            self.timer?.invalidate()
+            self.tabBarController.present(alert, animated: true)
+            
+        }
+    }
+    
+    
 }
 
 
@@ -65,6 +91,7 @@ extension TabBarCoordinator: CoordinatorProtocol {
         ]
         tabBarController.viewControllers = controllers
         self.tabBarController = tabBarController
+        createTimer()
         return self.tabBarController
         
     }
@@ -76,8 +103,6 @@ extension TabBarCoordinator: CoordinatorProtocol {
 
 extension TabBarCoordinator: TabBarCoordinatorProtocol {
     func switchToNextFlow() {
-        parentCoordinator?.switchToNextFlow(from: self, currentUser: currentUser)
+        self.parentCoordinator?.switchToNextFlow(from: self, currentUser: self.currentUser)
     }
-    
-    
 }
