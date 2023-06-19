@@ -81,7 +81,7 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
        let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.isHidden = true
+//        button.isHidden = true
         button.alpha = 0
         button.addTarget(self, action: #selector(cancelAnimation), for: .touchUpInside)
         return button
@@ -104,7 +104,6 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        
         setupGestureRecognizer()
     }
     override func layoutSubviews() {
@@ -132,12 +131,12 @@ final class ProfileHeaderView: UITableViewHeaderFooterView {
     }
    
     @objc private func cancelAnimation() {
-        delegate?.closePhoto(image: setProfileAvatar)
+        delegate?.closePhoto(image: setProfileAvatar, background: backgroundPhoto, close: closePhotoButton)
     }
     
     @objc private func didTapPhotoAlert() {
         print("tap complete")
-        delegate?.presentAlert(image: setProfileAvatar)
+        delegate?.presentAlert(image: setProfileAvatar, background: backgroundPhoto, close: closePhotoButton)
     }
     
     @objc private func didTapStatusShow() {

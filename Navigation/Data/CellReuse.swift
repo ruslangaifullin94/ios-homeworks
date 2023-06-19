@@ -12,4 +12,5 @@ enum CellReuseID: String {
     case custom = "CustomTableViewCell_ReuseID"
     case photo = "PhotoTableViewCell_ReuseID"
     case photoCollection = "PhotoCollectionTableViewCell_ReuseID"
+    case header = "ProfileHeaderTable"
 }
