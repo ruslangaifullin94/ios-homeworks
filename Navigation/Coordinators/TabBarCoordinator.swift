@@ -85,13 +85,16 @@ extension TabBarCoordinator: CoordinatorProtocol {
         addChildCoordinator(coordinator: feedCoordinator)
         let profileCoordinator = ProfileCoordinator(navigationController: UINavigationController(), parentCoordinator: self, currentUser: currentUser)
         addChildCoordinator(coordinator: profileCoordinator)
+        let multimediaCoordinator = MultimediaCoordinator(navigationController: UINavigationController(), parentCoordinator: self)
+        addChildCoordinator(coordinator: multimediaCoordinator)
         let controllers = [
             feedCoordinator.start(),
-            profileCoordinator.start()
+            profileCoordinator.start(),
+            multimediaCoordinator.start()
         ]
         tabBarController.viewControllers = controllers
         self.tabBarController = tabBarController
-        createTimer()
+//        createTimer()
         return self.tabBarController
         
     }

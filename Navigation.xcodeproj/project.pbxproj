@@ -42,6 +42,14 @@
 		5A4C05B729E063D8004534BA /* CellReuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C05B629E063D8004534BA /* CellReuse.swift */; };
 		5A655D742A2CB648005CDD31 /* GeneratePassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655D732A2CB648005CDD31 /* GeneratePassword.swift */; };
 		5A655D762A2CBE57005CDD31 /* BrutForce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655D752A2CBE57005CDD31 /* BrutForce.swift */; };
+		5A655DA42A4216C6005CDD31 /* MultimediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655DA32A4216C6005CDD31 /* MultimediaViewController.swift */; };
+		5A655DA62A4216D7005CDD31 /* MultimediaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655DA52A4216D7005CDD31 /* MultimediaViewModel.swift */; };
+		5A655DA82A421783005CDD31 /* MultimediaCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655DA72A421783005CDD31 /* MultimediaCoordinator.swift */; };
+		5A655DAA2A422A59005CDD31 /* MultimediaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655DA92A422A59005CDD31 /* MultimediaService.swift */; };
+		5A655DAF2A42344B005CDD31 /* dali.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5A655DAC2A42344A005CDD31 /* dali.mp3 */; };
+		5A655DB02A42344B005CDD31 /* strely.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5A655DAD2A42344A005CDD31 /* strely.mp3 */; };
+		5A655DB12A42344B005CDD31 /* cubaLibre.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5A655DAE2A42344B005CDD31 /* cubaLibre.mp3 */; };
+		5A655DB32A426266005CDD31 /* MultimediaViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */; };
 		5AF6D5152A0E88F7003640B5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5142A0E88F7003640B5 /* User.swift */; };
 		5AF6D5AE2A15FD59003640B5 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5AD2A15FD59003640B5 /* Checker.swift */; };
 		5AF6D5B32A16B326003640B5 /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 5AF6D5B22A16B326003640B5 /* iOSIntPackage */; };
@@ -85,6 +93,14 @@
 		5A4C05B629E063D8004534BA /* CellReuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellReuse.swift; sourceTree = "<group>"; };
 		5A655D732A2CB648005CDD31 /* GeneratePassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratePassword.swift; sourceTree = "<group>"; };
 		5A655D752A2CBE57005CDD31 /* BrutForce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrutForce.swift; sourceTree = "<group>"; };
+		5A655DA32A4216C6005CDD31 /* MultimediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaViewController.swift; sourceTree = "<group>"; };
+		5A655DA52A4216D7005CDD31 /* MultimediaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaViewModel.swift; sourceTree = "<group>"; };
+		5A655DA72A421783005CDD31 /* MultimediaCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaCoordinator.swift; sourceTree = "<group>"; };
+		5A655DA92A422A59005CDD31 /* MultimediaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaService.swift; sourceTree = "<group>"; };
+		5A655DAC2A42344A005CDD31 /* dali.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dali.mp3; sourceTree = "<group>"; };
+		5A655DAD2A42344A005CDD31 /* strely.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = strely.mp3; sourceTree = "<group>"; };
+		5A655DAE2A42344B005CDD31 /* cubaLibre.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cubaLibre.mp3; sourceTree = "<group>"; };
+		5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaViewCell.swift; sourceTree = "<group>"; };
 		5AF6D5142A0E88F7003640B5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5AF6D5AD2A15FD59003640B5 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,6 +174,7 @@
 				5A23BDDC2A1D292C00ECB977 /* FeedCoordinator.swift */,
 				5A23BDDE2A1D294A00ECB977 /* ProfileCoordinator.swift */,
 				5A23BE062A20892700ECB977 /* LoginCoordinator.swift */,
+				5A655DA72A421783005CDD31 /* MultimediaCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -190,6 +207,8 @@
 		5A3902C929B762D8005751E3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				5A655DAB2A422C6C005CDD31 /* Music */,
+				5A655DA22A42169F005CDD31 /* Multimedia */,
 				5A23BE432A24E6FD00ECB977 /* SettingsController */,
 				5A23BDD52A1D255B00ECB977 /* Coordinators */,
 				5A23BDD22A1CA46F00ECB977 /* Feed */,
@@ -240,6 +259,27 @@
 				5A4C05AC29D2E6C9004534BA /* HeaderTableView.swift */,
 			);
 			path = TableViewStyle;
+			sourceTree = "<group>";
+		};
+		5A655DA22A42169F005CDD31 /* Multimedia */ = {
+			isa = PBXGroup;
+			children = (
+				5A655DA32A4216C6005CDD31 /* MultimediaViewController.swift */,
+				5A655DA52A4216D7005CDD31 /* MultimediaViewModel.swift */,
+				5A655DA92A422A59005CDD31 /* MultimediaService.swift */,
+				5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */,
+			);
+			path = Multimedia;
+			sourceTree = "<group>";
+		};
+		5A655DAB2A422C6C005CDD31 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				5A655DAE2A42344B005CDD31 /* cubaLibre.mp3 */,
+				5A655DAC2A42344A005CDD31 /* dali.mp3 */,
+				5A655DAD2A42344A005CDD31 /* strely.mp3 */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,7 +347,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A3902D729B762DA005751E3 /* LaunchScreen.storyboard in Resources */,
+				5A655DB12A42344B005CDD31 /* cubaLibre.mp3 in Resources */,
 				5A3902D429B762DA005751E3 /* Assets.xcassets in Resources */,
+				5A655DAF2A42344B005CDD31 /* dali.mp3 in Resources */,
+				5A655DB02A42344B005CDD31 /* strely.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +370,7 @@
 				5A23BDDB2A1D28CC00ECB977 /* TabBarCoordinator.swift in Sources */,
 				5A23BE462A24E72A00ECB977 /* SettingsViewController.swift in Sources */,
 				5A23BE482A24E73B00ECB977 /* SettingsViewModel.swift in Sources */,
+				5A655DAA2A422A59005CDD31 /* MultimediaService.swift in Sources */,
 				5A3902E129B777A2005751E3 /* FeedViewController.swift in Sources */,
 				5A23BE052A1FE64800ECB977 /* LoginViewModel.swift in Sources */,
 				5A655D742A2CB648005CDD31 /* GeneratePassword.swift in Sources */,
@@ -334,6 +378,7 @@
 				5A3902EB29B7A623005751E3 /* InfoViewController.swift in Sources */,
 				5A3902E929B79B1F005751E3 /* Post.swift in Sources */,
 				5A4C05B329DAF084004534BA /* Photos.swift in Sources */,
+				5A655DB32A426266005CDD31 /* MultimediaViewCell.swift in Sources */,
 				5AF6D5152A0E88F7003640B5 /* User.swift in Sources */,
 				5A23BDD72A1D259C00ECB977 /* Protocol.swift in Sources */,
 				5A23BE072A20892700ECB977 /* LoginCoordinator.swift in Sources */,
@@ -341,6 +386,8 @@
 				5A23BDD92A1D262000ECB977 /* MainCoordinator.swift in Sources */,
 				5A23BDE12A1E513100ECB977 /* FeedViewModel.swift in Sources */,
 				5A4C05AD29D2E6C9004534BA /* HeaderTableView.swift in Sources */,
+				5A655DA62A4216D7005CDD31 /* MultimediaViewModel.swift in Sources */,
+				5A655DA42A4216C6005CDD31 /* MultimediaViewController.swift in Sources */,
 				5A3902CD29B762D8005751E3 /* SceneDelegate.swift in Sources */,
 				5A23BDCF2A1C196A00ECB977 /* CustomTextField.swift in Sources */,
 				5A23BDD42A1D0F1A00ECB977 /* ProfileViewModel.swift in Sources */,
@@ -353,6 +400,7 @@
 				5A3902EF29B8DF5C005751E3 /* ProfileHeaderView.swift in Sources */,
 				5A23BDDD2A1D292C00ECB977 /* FeedCoordinator.swift in Sources */,
 				5A23BDD12A1CA46800ECB977 /* FeedModelService.swift in Sources */,
+				5A655DA82A421783005CDD31 /* MultimediaCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
