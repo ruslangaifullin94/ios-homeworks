@@ -1,5 +1,5 @@
 //
-//  BaseTableViewCell.swift
+//  PostTableViewCell.swift
 //  Navigation
 //
 //  Created by Руслан Гайфуллин on 23.03.2023.

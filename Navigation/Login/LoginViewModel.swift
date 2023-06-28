@@ -22,8 +22,6 @@ protocol LoginViewModelProtocol: AnyObject {
     func passGenerate()
 }
 
-
-
 final class LoginViewModel {
     
     
@@ -73,9 +71,6 @@ final class LoginViewModel {
     }
     #endif
 
-    
-    
-    
 }
 
 
@@ -86,17 +81,32 @@ extension LoginViewModel: LoginViewModelProtocol {
     
     func loginCheck(_ login: String?,_ password: String?) {
         guard let loginDelegate = self.loginDelegate else {return}
+
         switch self.userService.logInToUser(login) {
         case .success(let user):
             
-            switch loginDelegate.check(user.userLogin, password!) {
-                
-            case .failure(let error):
-                state = .wrong(text: error.errorDescription)
-            case .success(_):
+//            switch loginDelegate.check(user.userLogin, password!) {
+//
+//            case .failure(let error):
+//                state = .wrong(text: error.errorDescription)
+//            case .success(_):
+//                coordinator.switchToNextFlow(currentUser: user)
+//                state = .login
+//            }
+            
+            do {
+                try loginDelegate.checkNew(user.userLogin, password!)
                 coordinator.switchToNextFlow(currentUser: user)
                 state = .login
+            } catch CheckerError.wrongLogin {
+                state = .wrong(text: CheckerError.wrongLogin.errorDescription)
+            } catch CheckerError.wrongPass {
+                state = .wrong(text: CheckerError.wrongPass.errorDescription)
+            } catch {
+                state = .wrong(text: "неизвестная ошибка")
             }
+                
+            
 
         case .failure(let error):
             switch error {

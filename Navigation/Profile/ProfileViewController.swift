@@ -7,10 +7,10 @@
 
 import UIKit
 protocol ProfileViewControllerDelegate: AnyObject {
-    func presentAlert(image: UIImageView)
-    func openPhoto(image: UIImageView)
+    func presentAlert(image: UIImageView, background: UIView, close: UIButton)
+    func openPhoto(image: UIImageView, background: UIView, close: UIButton)
     func savePoint(image: UIImageView) -> CGPoint
-    func closePhoto(image: UIImageView)
+    func closePhoto(image: UIImageView, background: UIView, close: UIButton)
 }
 
 final class ProfileViewController: UIViewController {
@@ -27,16 +27,21 @@ final class ProfileViewController: UIViewController {
      lazy var tableView: UITableView = {
         let tableView = UITableView.init(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+         tableView.delegate = self
+         tableView.dataSource = self
+         tableView.register(ProfileHeaderView.self, forHeaderFooterViewReuseIdentifier: CellReuseID.header.rawValue)
+         tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: CellReuseID.photo.rawValue)
+         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
+         tableView.separatorInset = .zero
         return tableView
     }()
 
-   private lazy var profileHeaderView: ProfileHeaderView  = {
-        let headerView = ProfileHeaderView()
-       headerView.setupUser(self.viewModel.currentUser)
-        headerView.delegate = self
-       return headerView
-    }()
+//   private lazy var profileHeaderView: ProfileHeaderView  = {
+//        let headerView = ProfileHeaderView()
+//       headerView.setupUser(self.viewModel.currentUser)
+//        headerView.delegate = self
+//       return headerView
+//    }()
     
     //MARK: - LifeCycle
     
@@ -53,29 +58,27 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         addSubviews()
         setupView()
-        tuneTableView()
-        bindViewModel()
+//        bindViewModel()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         navigationController?.isNavigationBarHidden = false
-       
     }
     
     
     //MARK: - Private Methods
     
-    private func bindViewModel() {
-        viewModel.stateChanger = { [weak self] state in
-            switch state {
-            case .loading:
-                ()
-            case .loaded:
-                ()
-            }
-        }
-    }
+//    private func bindViewModel() {
+//        viewModel.stateChanger = { [weak self] state in
+//            switch state {
+//            case .loading:
+//                ()
+//            case .loaded:
+//                ()
+//            }
+//        }
+//    }
     
     private func addSubviews(){
         view.addSubview(tableView)
@@ -88,28 +91,12 @@ final class ProfileViewController: UIViewController {
 
         let safeAreaGuide = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor, constant: 0),
+            tableView.topAnchor.constraint(equalTo: safeAreaGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: safeAreaGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeAreaGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor),
-            
+            tableView.bottomAnchor.constraint(equalTo: safeAreaGuide.bottomAnchor)
         ])
     }
-    
-    private func tuneTableView() {
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44.0
-        if #available(iOS 15.0, *) {
-            tableView.sectionHeaderTopPadding = 0.0
-        }
-
-        tableView.setAndLayout(headerView: profileHeaderView)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: CellReuseID.photo.rawValue)
-        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: CellReuseID.base.rawValue)
-    }
-    
     
     @objc private func didTapSettingsButton() {
         viewModel.pushSettingsController()
@@ -122,19 +109,13 @@ final class ProfileViewController: UIViewController {
 //MARK: - UITableViewDataSource
 
 extension ProfileViewController: UITableViewDataSource {
-    
-    
 
     func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        } else {
-            return viewModel.data.count
-        }
+        section == 0 ? 1 : viewModel.data.count
     }
 
     
@@ -161,25 +142,30 @@ extension ProfileViewController: UITableViewDataSource {
 
 extension ProfileViewController: UITableViewDelegate {
     
-   
-    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        section == 0 ? 220 : 0
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return 180
-        } else {
-            return UITableView.automaticDimension
-        }
+        indexPath.section == 0 ? 180 : UITableView.automaticDimension
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        if indexPath.section == 0 {
-            self.viewModel.didTapPhotoCollection()
-        }
-        tableView.deselectRow(at: indexPath, animated: true)
+        indexPath.section == 0 ? self.viewModel.didTapPhotoCollection() : tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: CellReuseID.header.rawValue) as? ProfileHeaderView else { fatalError("error")}
+            header.setupUser(self.viewModel.currentUser)
+            header.delegate = self
+            return header
+        } else {
+            return nil
+        }
+
+    }
     
 }
 
@@ -189,13 +175,13 @@ extension ProfileViewController: UITableViewDelegate {
 extension ProfileViewController: ProfileViewControllerDelegate {
    
     
-    func presentAlert(image: UIImageView) {
+    func presentAlert(image: UIImageView, background: UIView, close: UIButton) {
         print("i work")
         let optionMenu = UIAlertController(title: nil, message: "Profile photo", preferredStyle: .actionSheet)
 
         let openAction = UIAlertAction(title: "Открыть фото", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
-            self.openPhoto(image: image)
+            self.openPhoto(image: image, background: background, close: close)
                 
                 print("Open photo")
             })
@@ -222,8 +208,8 @@ extension ProfileViewController: ProfileViewControllerDelegate {
     
     
     
-    func openPhoto(image: UIImageView) {
-        guard let header = self.tableView.tableHeaderView as? ProfileHeaderView else {return}
+    func openPhoto(image: UIImageView, background: UIView, close: UIButton) {
+//        guard let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: CellReuseID.header.rawValue) as? ProfileHeaderView else {return}
         pointOnPhoto = savePoint(image: image)
         profileAvatar = image
         let screen = UIScreen.main.bounds.width / image.bounds.width
@@ -237,19 +223,19 @@ extension ProfileViewController: ProfileViewControllerDelegate {
 
                     image.center = CGPoint(x: self.view.bounds.midX, y: self.view.bounds.midY)
                     image.transform = CGAffineTransform(scaleX: screen, y: screen)
-                    header.backgroundPhoto.alpha = 0.5
+                    background.alpha = 1
 
                 }
-                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3)
+                UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5)
                 {
-                    header.closePhotoButton.alpha = 1
+                    close.alpha = 0.5
                     image.layer.cornerRadius = 0.0
                     image.layer.borderWidth = 0
-                    header.closePhotoButton.isHidden = false
                 }
 
             },
             completion: {_ in
+//                header.backgroundPhoto.alpha = 1
                 self.navigationController?.tabBarController?.tabBar.isHidden = true
                 self.tableView.isScrollEnabled = false
                 self.tableView.allowsSelection = false
@@ -257,24 +243,22 @@ extension ProfileViewController: ProfileViewControllerDelegate {
             }
         )
     }
-    func closePhoto(image: UIImageView) {
-        
-        guard let header = self.tableView.tableHeaderView as? ProfileHeaderView else {return}
+    func closePhoto(image: UIImageView, background: UIView, close: UIButton) {
         UIView.animateKeyframes(
             withDuration: 1.5,
             delay: 0.1,
             options: .calculationModeLinear,
             animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                    header.closePhotoButton.alpha = 0
+                    close.alpha = 0
                     self.profileAvatar!.layer.cornerRadius = 60
                     self.profileAvatar!.layer.borderWidth = 3
-                    header.backgroundPhoto.alpha = 0
+                    background.alpha = 0
                 }
                 UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3) {
                     self.profileAvatar!.transform = CGAffineTransform(scaleX: 1, y: 1)
                     self.profileAvatar!.center = self.pointOnPhoto!
-                    header.closePhotoButton.isHidden = true
+                    close.isHidden = true
 
                 }
             },

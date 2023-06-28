@@ -61,6 +61,4 @@ extension PhotoViewModel: PhotoViewModelProtocol {
             }
         }
     }
-    
-    
 }
