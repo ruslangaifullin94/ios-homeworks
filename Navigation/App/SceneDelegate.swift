@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let mainCoordinator = MainCoordinator(rootViewController: rootViewController)
         window.rootViewController = mainCoordinator.start()
         window.makeKeyAndVisible()
+        NetworkService.getRequest(for: .url1)
         createPhotosArray()
         self.window = window
         self.mainCoordinator = mainCoordinator

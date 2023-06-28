@@ -6,11 +6,12 @@
 //
 
 import AVFoundation
+
 protocol MultimediaServiceDelegate: AnyObject {
     func updateSlider(newValue: Float)
     func updateMaxValueSlider(value: Float)
     func updateNameLabel(name: String)
-   
+
 }
 
 protocol MultimediaServiceProtocol {
@@ -114,10 +115,10 @@ extension MultimediaService: MultimediaServiceProtocol {
         player.seek(to: .zero)
         
         player.replaceCurrentItem(with: nextItem)
-        player.play()
-        getTitleAudio()
+//        player.play()
+//        getTitleAudio()
 
-//        playPlayer()
+        playPlayer()
     }
     
     func playPreviousAudio() {
@@ -137,10 +138,10 @@ extension MultimediaService: MultimediaServiceProtocol {
         player.seek(to: .zero)
         
         player.replaceCurrentItem(with: previousItem)
-        player.play()
-        getTitleAudio()
+//        player.play()
+//        getTitleAudio()
 
-//        playPlayer()
+        playPlayer()
     }
     
     func stopPlayer() {

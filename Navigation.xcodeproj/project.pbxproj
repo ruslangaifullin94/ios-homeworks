@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A1CA16F2A4CB52D0007CBF6 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1CA16E2A4CB52D0007CBF6 /* NetworkService.swift */; };
 		5A23BDCD2A1C137800ECB977 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A23BDCC2A1C137800ECB977 /* CustomButton.swift */; };
 		5A23BDCF2A1C196A00ECB977 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A23BDCE2A1C196A00ECB977 /* CustomTextField.swift */; };
 		5A23BDD12A1CA46800ECB977 /* FeedModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A23BDD02A1CA46800ECB977 /* FeedModelService.swift */; };
@@ -56,6 +57,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A1CA16E2A4CB52D0007CBF6 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		5A23BDCC2A1C137800ECB977 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		5A23BDCE2A1C196A00ECB977 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		5A23BDD02A1CA46800ECB977 /* FeedModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModelService.swift; sourceTree = "<group>"; };
@@ -117,6 +119,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A1CA16D2A4CB5120007CBF6 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				5A1CA16E2A4CB52D0007CBF6 /* NetworkService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		5A23BDC82A1C129700ECB977 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,6 +217,7 @@
 		5A3902C929B762D8005751E3 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				5A1CA16D2A4CB5120007CBF6 /* Network */,
 				5A655DAB2A422C6C005CDD31 /* Music */,
 				5A655DA22A42169F005CDD31 /* Multimedia */,
 				5A23BE432A24E6FD00ECB977 /* SettingsController */,
@@ -386,6 +397,7 @@
 				5A23BDD92A1D262000ECB977 /* MainCoordinator.swift in Sources */,
 				5A23BDE12A1E513100ECB977 /* FeedViewModel.swift in Sources */,
 				5A4C05AD29D2E6C9004534BA /* HeaderTableView.swift in Sources */,
+				5A1CA16F2A4CB52D0007CBF6 /* NetworkService.swift in Sources */,
 				5A655DA62A4216D7005CDD31 /* MultimediaViewModel.swift in Sources */,
 				5A655DA42A4216C6005CDD31 /* MultimediaViewController.swift in Sources */,
 				5A3902CD29B762D8005751E3 /* SceneDelegate.swift in Sources */,
