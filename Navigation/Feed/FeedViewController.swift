@@ -16,6 +16,8 @@ final class FeedViewController: UIViewController {
     private lazy var checkGuessButton = CustomButton(title: "Проверка", titleColor: .white, buttonAction: pressedButton)
 
     private lazy var secretWordField = CustomTextField(placeholder: "enter word")
+    
+    private lazy var buttonToInfoVC = CustomButton(title: "Info View ->", titleColor: .white, buttonAction: pushInfoViewController)
    
     
     //MARK: - LifeCycles
@@ -34,6 +36,7 @@ final class FeedViewController: UIViewController {
         view.backgroundColor = .systemBackground
         view.addSubview(secretWordField)
         view.addSubview(checkGuessButton)
+        view.addSubview(buttonToInfoVC)
         setupConstrait()
         bindModel()
     }
@@ -42,6 +45,10 @@ final class FeedViewController: UIViewController {
     
     private func pressedButton() {
         feedViewModel.didTapCheckButton(secretWordField.text)
+    }
+    
+    private func pushInfoViewController() {
+        feedViewModel.pushInfoViewController()
     }
     
     private func bindModel() {
@@ -77,7 +84,12 @@ final class FeedViewController: UIViewController {
             checkGuessButton.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
             checkGuessButton.topAnchor.constraint(equalTo: secretWordField.bottomAnchor, constant: 20),
             checkGuessButton.heightAnchor.constraint(equalToConstant: 50),
-            checkGuessButton.widthAnchor.constraint(equalToConstant: 120)
+            checkGuessButton.widthAnchor.constraint(equalToConstant: 120),
+            
+            buttonToInfoVC.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            buttonToInfoVC.topAnchor.constraint(equalTo: checkGuessButton.bottomAnchor, constant: 20),
+            buttonToInfoVC.heightAnchor.constraint(equalToConstant: 50),
+            buttonToInfoVC.widthAnchor.constraint(equalToConstant: 120)
         ])
     }
 }

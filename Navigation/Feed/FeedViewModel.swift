@@ -9,12 +9,15 @@ import Foundation
 
 protocol FeedViewModelProtocol: AnyObject {
     var stateChanger: ((FeedViewModel.State)->Void)? {get set}
+    func pushInfoViewController()
     func didTapCheckButton(_ word: String?)
 }
 
 final class FeedViewModel {
     
     //MARK: - Properties
+    
+    private let coordinator: FeedCoodinatorProtocol
     
     var stateChanger: ((State) -> Void)?
     
@@ -34,8 +37,9 @@ final class FeedViewModel {
     
     //MARK: - Life Cycles
         
-    init(feedModelService: FeedModelProtocol) {
+    init(feedModelService: FeedModelProtocol, coordinator: FeedCoodinatorProtocol) {
         self.feedModelService = feedModelService
+        self.coordinator = coordinator
     }
     
 }
@@ -63,5 +67,9 @@ extension FeedViewModel: FeedViewModelProtocol {
                 }
             }
         }
+    }
+    
+    func pushInfoViewController() {
+        coordinator.pushInfoViewController()
     }
 }
