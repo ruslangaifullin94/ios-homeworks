@@ -66,7 +66,6 @@ extension ProfileCoordinator: CoordinatorProtocol {
 extension ProfileCoordinator: ProfileCoordinatorProtocol {
     
     func pushPhotoViewController(photos: [UIImage]) {
-        print("ok")
         let photoViewModel = PhotoViewModel()
         let photosViewController = PhotosViewController(viewModel: photoViewModel)
         photosViewController.title = "Profile Photo"

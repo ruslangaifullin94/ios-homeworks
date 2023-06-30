@@ -51,6 +51,7 @@
 		5A655DB02A42344B005CDD31 /* strely.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5A655DAD2A42344A005CDD31 /* strely.mp3 */; };
 		5A655DB12A42344B005CDD31 /* cubaLibre.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5A655DAE2A42344B005CDD31 /* cubaLibre.mp3 */; };
 		5A655DB32A426266005CDD31 /* MultimediaViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */; };
+		5A65A36C2A4DFD9D00938E68 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A65A36B2A4DFD9D00938E68 /* Planet.swift */; };
 		5AF6D5152A0E88F7003640B5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5142A0E88F7003640B5 /* User.swift */; };
 		5AF6D5AE2A15FD59003640B5 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5AD2A15FD59003640B5 /* Checker.swift */; };
 		5AF6D5B32A16B326003640B5 /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 5AF6D5B22A16B326003640B5 /* iOSIntPackage */; };
@@ -103,6 +104,7 @@
 		5A655DAD2A42344A005CDD31 /* strely.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = strely.mp3; sourceTree = "<group>"; };
 		5A655DAE2A42344B005CDD31 /* cubaLibre.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cubaLibre.mp3; sourceTree = "<group>"; };
 		5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaViewCell.swift; sourceTree = "<group>"; };
+		5A65A36B2A4DFD9D00938E68 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
 		5AF6D5142A0E88F7003640B5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5AF6D5AD2A15FD59003640B5 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				5A1CA16E2A4CB52D0007CBF6 /* NetworkService.swift */,
+				5A65A36B2A4DFD9D00938E68 /* Planet.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				5A4C05B729E063D8004534BA /* CellReuse.swift in Sources */,
 				5A3902EF29B8DF5C005751E3 /* ProfileHeaderView.swift in Sources */,
 				5A23BDDD2A1D292C00ECB977 /* FeedCoordinator.swift in Sources */,
+				5A65A36C2A4DFD9D00938E68 /* Planet.swift in Sources */,
 				5A23BDD12A1CA46800ECB977 /* FeedModelService.swift in Sources */,
 				5A655DA82A421783005CDD31 /* MultimediaCoordinator.swift in Sources */,
 			);
