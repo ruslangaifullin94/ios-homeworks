@@ -52,6 +52,8 @@
 		5A655DB12A42344B005CDD31 /* cubaLibre.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5A655DAE2A42344B005CDD31 /* cubaLibre.mp3 */; };
 		5A655DB32A426266005CDD31 /* MultimediaViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */; };
 		5A65A36C2A4DFD9D00938E68 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A65A36B2A4DFD9D00938E68 /* Planet.swift */; };
+		5A65A36E2A4EBB0700938E68 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A65A36D2A4EBB0700938E68 /* GoogleService-Info.plist */; };
+		5A65A3712A4EBCB400938E68 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5A65A3702A4EBCB400938E68 /* FirebaseAuth */; };
 		5AF6D5152A0E88F7003640B5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5142A0E88F7003640B5 /* User.swift */; };
 		5AF6D5AE2A15FD59003640B5 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5AD2A15FD59003640B5 /* Checker.swift */; };
 		5AF6D5B32A16B326003640B5 /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 5AF6D5B22A16B326003640B5 /* iOSIntPackage */; };
@@ -105,6 +107,7 @@
 		5A655DAE2A42344B005CDD31 /* cubaLibre.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = cubaLibre.mp3; sourceTree = "<group>"; };
 		5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaViewCell.swift; sourceTree = "<group>"; };
 		5A65A36B2A4DFD9D00938E68 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
+		5A65A36D2A4EBB0700938E68 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5AF6D5142A0E88F7003640B5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5AF6D5AD2A15FD59003640B5 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -115,6 +118,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AF6D5B32A16B326003640B5 /* iOSIntPackage in Frameworks */,
+				5A65A3712A4EBCB400938E68 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +242,7 @@
 				5A3902D329B762DA005751E3 /* Assets.xcassets */,
 				5A3902D529B762DA005751E3 /* LaunchScreen.storyboard */,
 				5A3902D829B762DA005751E3 /* Info.plist */,
+				5A65A36D2A4EBB0700938E68 /* GoogleService-Info.plist */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -314,6 +319,7 @@
 			name = Navigation;
 			packageProductDependencies = (
 				5AF6D5B22A16B326003640B5 /* iOSIntPackage */,
+				5A65A3702A4EBCB400938E68 /* FirebaseAuth */,
 			);
 			productName = Navigation;
 			productReference = 5A3902C729B762D8005751E3 /* Navigation.app */;
@@ -345,6 +351,7 @@
 			mainGroup = 5A3902BE29B762D8005751E3;
 			packageReferences = (
 				5AF6D5B12A16B326003640B5 /* XCRemoteSwiftPackageReference "iOSIntPackage" */,
+				5A65A36F2A4EBCB400938E68 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 5A3902C829B762D8005751E3 /* Products */;
 			projectDirPath = "";
@@ -365,6 +372,7 @@
 				5A3902D429B762DA005751E3 /* Assets.xcassets in Resources */,
 				5A655DAF2A42344B005CDD31 /* dali.mp3 in Resources */,
 				5A655DB02A42344B005CDD31 /* strely.mp3 in Resources */,
+				5A65A36E2A4EBB0700938E68 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -632,6 +640,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5A65A36F2A4EBCB400938E68 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 		5AF6D5B12A16B326003640B5 /* XCRemoteSwiftPackageReference "iOSIntPackage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TrueMax/iOSIntPackage/";
@@ -643,6 +659,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5A65A3702A4EBCB400938E68 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A65A36F2A4EBCB400938E68 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		5AF6D5B22A16B326003640B5 /* iOSIntPackage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5AF6D5B12A16B326003640B5 /* XCRemoteSwiftPackageReference "iOSIntPackage" */;
