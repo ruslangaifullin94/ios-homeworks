@@ -33,9 +33,11 @@ final class MultimediaService {
     
     private var player: AVPlayer?
     
+    var observer: Any?
+    
     init() {
         getAudio()
-        setupAudioPlayer()
+        setupAudioPlayer(item: playlist.randomElement())
         
     }
     
@@ -55,13 +57,12 @@ final class MultimediaService {
         }
     }
     
-    private func setupAudioPlayer() {
-        let player = AVPlayer()
-        player.replaceCurrentItem(with: playlist.randomElement())
+    private func setupAudioPlayer(item: AVPlayerItem?) {
+        guard let item else {return}
+        self.player = AVPlayer(playerItem: item)
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { [weak self] _ in
             self?.playNextAudio()
         }
-        self.player = player
     }
     
     private func getDuration() -> Float {
@@ -90,11 +91,20 @@ final class MultimediaService {
 extension MultimediaService: MultimediaServiceProtocol {
     
     func playPlayer() {
+        
         player?.play()
-        getTitleAudio()
-        let value = getDuration()
-        delegate?.updateMaxValueSlider(value: value)
-        progressAudio()
+        
+        observer = player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: DispatchQueue.main, using: { [weak self] _ in
+            guard let self else {return}
+            if self.player?.status == .readyToPlay {
+                getTitleAudio()
+                let value = getDuration()
+                delegate?.updateMaxValueSlider(value: value)
+                progressAudio()
+                
+                self.player?.removeTimeObserver(self.observer!)
+            }
+        })
     }
     
     func pausePlayer() {
@@ -115,10 +125,8 @@ extension MultimediaService: MultimediaServiceProtocol {
         player?.seek(to: .zero)
         
         player?.replaceCurrentItem(with: nextItem)
-        player?.play()
-        getTitleAudio()
-
-//        playPlayer()
+       
+        playPlayer()
     }
     
     func playPreviousAudio() {
@@ -132,16 +140,12 @@ extension MultimediaService: MultimediaServiceProtocol {
         var previousIndex = 0
         
         currentIndex == 0 ? (previousIndex = 0) : (previousIndex = (currentIndex - 1) % playlist.count)
-        
-        
+    
         let previousItem = playlist[previousIndex]
         player?.seek(to: .zero)
         
         player?.replaceCurrentItem(with: previousItem)
-        player?.play()
-        getTitleAudio()
-
-//        playPlayer()
+        playPlayer()
     }
     
     func stopPlayer() {
