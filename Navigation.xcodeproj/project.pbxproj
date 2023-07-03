@@ -54,6 +54,9 @@
 		5A65A36C2A4DFD9D00938E68 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A65A36B2A4DFD9D00938E68 /* Planet.swift */; };
 		5A65A36E2A4EBB0700938E68 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A65A36D2A4EBB0700938E68 /* GoogleService-Info.plist */; };
 		5A65A3712A4EBCB400938E68 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5A65A3702A4EBCB400938E68 /* FirebaseAuth */; };
+		5AB16DC82A51C12F005FB1BB /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB16DC72A51C12F005FB1BB /* RegistrationViewController.swift */; };
+		5AB16DCA2A51C8FB005FB1BB /* CheckerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB16DC92A51C8FB005FB1BB /* CheckerService.swift */; };
+		5AB16DCC2A51D13A005FB1BB /* AlertShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB16DCB2A51D13A005FB1BB /* AlertShared.swift */; };
 		5AF6D5152A0E88F7003640B5 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5142A0E88F7003640B5 /* User.swift */; };
 		5AF6D5AE2A15FD59003640B5 /* Checker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF6D5AD2A15FD59003640B5 /* Checker.swift */; };
 		5AF6D5B32A16B326003640B5 /* iOSIntPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 5AF6D5B22A16B326003640B5 /* iOSIntPackage */; };
@@ -108,6 +111,9 @@
 		5A655DB22A426266005CDD31 /* MultimediaViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultimediaViewCell.swift; sourceTree = "<group>"; };
 		5A65A36B2A4DFD9D00938E68 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
 		5A65A36D2A4EBB0700938E68 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5AB16DC72A51C12F005FB1BB /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		5AB16DC92A51C8FB005FB1BB /* CheckerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckerService.swift; sourceTree = "<group>"; };
+		5AB16DCB2A51D13A005FB1BB /* AlertShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertShared.swift; sourceTree = "<group>"; };
 		5AF6D5142A0E88F7003640B5 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5AF6D5AD2A15FD59003640B5 /* Checker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Checker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -149,6 +155,8 @@
 				5A4C05A729CB16B9004534BA /* LogInViewController.swift */,
 				5AF6D5AD2A15FD59003640B5 /* Checker.swift */,
 				5A23BE042A1FE64800ECB977 /* LoginViewModel.swift */,
+				5AB16DC72A51C12F005FB1BB /* RegistrationViewController.swift */,
+				5AB16DC92A51C8FB005FB1BB /* CheckerService.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -243,6 +251,7 @@
 				5A3902D529B762DA005751E3 /* LaunchScreen.storyboard */,
 				5A3902D829B762DA005751E3 /* Info.plist */,
 				5A65A36D2A4EBB0700938E68 /* GoogleService-Info.plist */,
+				5AB16DCB2A51D13A005FB1BB /* AlertShared.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -385,6 +394,7 @@
 			files = (
 				5A3902E729B781BA005751E3 /* PostViewController.swift in Sources */,
 				5A23BE4A2A2634FD00ECB977 /* PhotoViewModel.swift in Sources */,
+				5AB16DCC2A51D13A005FB1BB /* AlertShared.swift in Sources */,
 				5AF6D5AE2A15FD59003640B5 /* Checker.swift in Sources */,
 				5A3902CB29B762D8005751E3 /* AppDelegate.swift in Sources */,
 				5A23BDCD2A1C137800ECB977 /* CustomButton.swift in Sources */,
@@ -396,6 +406,7 @@
 				5A3902E129B777A2005751E3 /* FeedViewController.swift in Sources */,
 				5A23BE052A1FE64800ECB977 /* LoginViewModel.swift in Sources */,
 				5A655D742A2CB648005CDD31 /* GeneratePassword.swift in Sources */,
+				5AB16DCA2A51C8FB005FB1BB /* CheckerService.swift in Sources */,
 				5A23BDDF2A1D294A00ECB977 /* ProfileCoordinator.swift in Sources */,
 				5A3902EB29B7A623005751E3 /* InfoViewController.swift in Sources */,
 				5A3902E929B79B1F005751E3 /* Post.swift in Sources */,
@@ -405,6 +416,7 @@
 				5A23BDD72A1D259C00ECB977 /* Protocol.swift in Sources */,
 				5A23BE072A20892700ECB977 /* LoginCoordinator.swift in Sources */,
 				5A3902E329B777AF005751E3 /* ProfileViewController.swift in Sources */,
+				5AB16DC82A51C12F005FB1BB /* RegistrationViewController.swift in Sources */,
 				5A23BDD92A1D262000ECB977 /* MainCoordinator.swift in Sources */,
 				5A23BDE12A1E513100ECB977 /* FeedViewModel.swift in Sources */,
 				5A4C05AD29D2E6C9004534BA /* HeaderTableView.swift in Sources */,

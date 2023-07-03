@@ -41,9 +41,9 @@ final class LoginCoordinator {
         #else
         let userService = CurrentUserService()
         #endif
-        
+        let checkerService = CheckerService()
         let loginViewControllerDelegate = MyLoginFactory().makeLoginInspector()
-        let loginViewModel = LoginViewModel(userService: userService, coordinator: self)
+        let loginViewModel = LoginViewModel(userService: userService, coordinator: self, chekerService: checkerService)
         let loginViewController = LogInViewController(loginViewModel: loginViewModel)
         loginViewModel.loginDelegate = loginViewControllerDelegate
         let navController = UINavigationController(rootViewController: loginViewController)

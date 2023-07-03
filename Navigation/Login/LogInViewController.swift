@@ -16,7 +16,7 @@ final class LogInViewController: UIViewController {
     private let loginViewModel: LoginViewModelProtocol
     
     private lazy var logInButton = CustomButton(title: "Log In", titleColor: .white, buttonAction: logIn)
-    private lazy var brutForceButton = CustomButton(title: "Generate Password", titleColor: .white, buttonAction: generatePassword)
+    private lazy var brutForceButton = CustomButton(title: "Sign In", titleColor: .white, buttonAction: signin)
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -41,7 +41,7 @@ final class LogInViewController: UIViewController {
     
     private lazy var login: CustomTextField = {
         let login  = CustomTextField(placeholder: "Email or Phone")
-        login.text = "cat"
+//        login.text = "cat"
         login.delegate = self
         login.tag = 0
         login.returnKeyType = .continue
@@ -50,7 +50,7 @@ final class LogInViewController: UIViewController {
     
     private lazy var password: CustomTextField = {
         let password  = CustomTextField(placeholder: "Password")
-        password.text = "catcat"
+//        password.text = "catcat"
         password.returnKeyType = .done
         password.isSecureTextEntry = true
         password.tag = 1
@@ -96,7 +96,9 @@ final class LogInViewController: UIViewController {
         setupContentOfScrollView()
         setupConstraits()
         bindLoginModel()
-     
+        if login.text == "" || password.text == "" {
+            logInButton.isEnabled = false
+        }
         self.navigationController?.isNavigationBarHidden = true
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -134,6 +136,13 @@ final class LogInViewController: UIViewController {
         loginViewModel.passGenerate()
        
         
+    }
+    private func signin() {
+        let checkerService = CheckerService()
+        let registrationViewController = RegistrationViewController(checkerService: checkerService)
+        registrationViewController.modalTransitionStyle = .coverVertical
+        registrationViewController.modalPresentationStyle = .formSheet
+        present(registrationViewController, animated: true)
     }
     
     private func bindLoginModel() {
@@ -248,6 +257,18 @@ extension LogInViewController: UITextFieldDelegate {
             logIn()
         }
         return true
+    }
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField.text == "" {
+            logInButton.isEnabled = false
+        } else {
+            logInButton.isEnabled = true
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+      
     }
 }
 
