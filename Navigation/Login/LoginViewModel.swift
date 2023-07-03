@@ -38,6 +38,8 @@ final class LoginViewModel {
 
     var loginDelegate: LoginViewControllerDelegate?
     
+    var chekerService: CheckerServiceProtocol
+    
     enum State {
         case logout
         case login
@@ -59,15 +61,17 @@ final class LoginViewModel {
     //MARK: - Life Cycles
     
     #if DEBUG
-    init(userService: TestUserService, coordinator: LoginCoordinator) {
+    init(userService: TestUserService, coordinator: LoginCoordinator, chekerService: CheckerServiceProtocol) {
         self.userService = userService
         self.coordinator = coordinator
+        self.chekerService = chekerService
     }
 
     #else
-    init(userService: CurrentUserService, coordinator: LoginCoordinator) {
+    init(userService: CurrentUserService, coordinator: LoginCoordinator, chekerService: CheckerServiceProtocol) {
         self.userService = userService
         self.coordinator = coordinator
+        self.chekerService = chekerService
     }
     #endif
 
@@ -80,10 +84,24 @@ final class LoginViewModel {
 extension LoginViewModel: LoginViewModelProtocol {
     
     func loginCheck(_ login: String?,_ password: String?) {
-        guard let loginDelegate = self.loginDelegate else {return}
-
-        switch self.userService.logInToUser(login) {
-        case .success(let user):
+        
+        guard let login, let password else {
+            return
+        }
+        chekerService.checkCredentials(login, password) { user, error in
+            guard let user else {
+                self.state = .wrong(text: error ?? "Something went wrong...")
+                return
+            }
+            self.state = .login
+            self.coordinator.switchToNextFlow(currentUser: user)
+        }
+        
+        
+//        guard let loginDelegate = self.loginDelegate else {return}
+//
+//        switch self.userService.logInToUser(login) {
+//        case .success(let user):
             
 //            switch loginDelegate.check(user.userLogin, password!) {
 //
@@ -94,26 +112,30 @@ extension LoginViewModel: LoginViewModelProtocol {
 //                state = .login
 //            }
             
-            do {
-                try loginDelegate.checkNew(user.userLogin, password!)
-                coordinator.switchToNextFlow(currentUser: user)
-                state = .login
-            } catch CheckerError.wrongLogin {
-                state = .wrong(text: CheckerError.wrongLogin.errorDescription)
-            } catch CheckerError.wrongPass {
-                state = .wrong(text: CheckerError.wrongPass.errorDescription)
-            } catch {
-                state = .wrong(text: "неизвестная ошибка")
-            }
-                
-            
-
-        case .failure(let error):
-            switch error {
-            case .wrongLogin:
-                state =  .wrong(text: error.errorDescription)
-            }
-        }
+//            do {
+//                try loginDelegate.checkNew(user.userLogin, password!)
+//                coordinator.switchToNextFlow(currentUser: user)
+//                state = .login
+//            } catch CheckerError.wrongLogin {
+//                state = .wrong(text: CheckerError.wrongLogin.errorDescription)
+//            } catch CheckerError.wrongPass {
+//                state = .wrong(text: CheckerError.wrongPass.errorDescription)
+//            } catch {
+//                state = .wrong(text: "неизвестная ошибка")
+//            }
+//
+//
+//
+//        case .failure(let error):
+//            switch error {
+//            case .wrongLogin:
+//                state =  .wrong(text: error.errorDescription)
+//            }
+//        }
+    }
+    
+    func loginToProfile() {
+        
     }
     
     func passGenerate() {

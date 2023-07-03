@@ -6,11 +6,12 @@
 //
 
 import AVFoundation
+
 protocol MultimediaServiceDelegate: AnyObject {
     func updateSlider(newValue: Float)
     func updateMaxValueSlider(value: Float)
     func updateNameLabel(name: String)
-   
+
 }
 
 protocol MultimediaServiceProtocol {
@@ -24,84 +25,94 @@ protocol MultimediaServiceProtocol {
 
 final class MultimediaService {
     
+    private lazy var audioTracks: [String: AVPlayerItem] = [:]
     
-    private let path1 = Bundle.main.path(forResource: "dali", ofType: "mp3")
-    private let path2 = Bundle.main.path(forResource: "strely", ofType: "mp3")
-    private let path3 = Bundle.main.path(forResource: "cubaLibre", ofType: "mp3")
-    
-    private lazy var url1 = URL(fileURLWithPath: path1 ?? "")
-    private lazy var url2 = URL(fileURLWithPath: path2 ?? "")
-    private lazy var url3 = URL(fileURLWithPath: path3 ?? "")
-    
-    private lazy var playerItem1 = AVPlayerItem(url: url1)
-    private lazy var playerItem2 = AVPlayerItem(url: url2)
-    private lazy var playerItem3 = AVPlayerItem(url: url3)
-
-    private lazy var playlist = [playerItem1, playerItem2, playerItem3]
+    private lazy var playlist = [AVPlayerItem](audioTracks.values)
     
     weak var delegate: MultimediaServiceDelegate?
     
-    private var player: AVPlayer = {
-        let player = AVPlayer()
-        return player
-    }()
+    private var player: AVPlayer?
+    
+    var observer: Any?
     
     init() {
-      
-        setupAudioPlayer()
+        getAudio()
+        setupAudioPlayer(item: playlist.randomElement())
         
     }
     
-    private func setupAudioPlayer() {
-        player.replaceCurrentItem(with: playlist[0])
+    private func getAudio() {
+        guard let path = Bundle.main.resourcePath else {
+            fatalError()
+        }
+        let files = try! FileManager.default.contentsOfDirectory(atPath: path)
+        let mp3Files = files.filter { $0.hasSuffix(".mp3") }
+
+        for mp3File in mp3Files {
+            if let url = Bundle.main.url(forResource: mp3File, withExtension: nil) {
+                let track = AVPlayerItem(url: url)
+                let trackTitle = url.lastPathComponent
+                audioTracks[trackTitle] = track
+            }
+        }
+    }
+    
+    private func setupAudioPlayer(item: AVPlayerItem?) {
+        guard let item else {return}
+        self.player = AVPlayer(playerItem: item)
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: nil) { [weak self] _ in
             self?.playNextAudio()
         }
     }
     
     private func getDuration() -> Float {
-        let duration = CMTimeGetSeconds(player.currentItem?.duration ?? .zero)
+        let duration = CMTimeGetSeconds(player?.currentItem?.duration ?? .zero)
         let time = Float(duration)
         return time
     }
     
     private func getTitleAudio(){
-        if let currentItem = player.currentItem {
-            if currentItem == playerItem1 {
-                delegate?.updateNameLabel(name: "Markul - Dali")
-            } else if currentItem == playerItem2 {
-                delegate?.updateNameLabel(name: "Markul - Стрелы")
-            } else {
-                delegate?.updateNameLabel(name: "Markul - Cuba Libre")
+        if let currentItem = player?.currentItem {
+            let title = audioTracks.first { $0.value == currentItem }?.key
+                delegate?.updateNameLabel(name: title!)
             }
         }
-    }
+    
     
     private func progressAudio() {
-         player.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 1000), queue: .main) { [weak self] time in
+        player?.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 1000), queue: .main) { [weak self] time in
              let currentTime = CMTimeGetSeconds(time)
              self?.delegate?.updateSlider(newValue: Float(currentTime))
          }
+     
      }
-   
 }
 
 extension MultimediaService: MultimediaServiceProtocol {
     
     func playPlayer() {
-        player.play()
-        getTitleAudio()
-        let value = getDuration()
-        delegate?.updateMaxValueSlider(value: value)
-        progressAudio()
+        
+        player?.play()
+        
+        observer = player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 1), queue: DispatchQueue.main, using: { [weak self] _ in
+            guard let self else {return}
+            if self.player?.status == .readyToPlay {
+                getTitleAudio()
+                let value = getDuration()
+                delegate?.updateMaxValueSlider(value: value)
+                progressAudio()
+                
+                self.player?.removeTimeObserver(self.observer!)
+            }
+        })
     }
     
     func pausePlayer() {
-        player.pause()
+        player?.pause()
     }
     
     func playNextAudio() {
-        guard let currentItem = player.currentItem else {
+        guard let currentItem = player?.currentItem else {
             return
         }
         guard let currentIndex = playlist.firstIndex(of: currentItem) else {
@@ -111,17 +122,15 @@ extension MultimediaService: MultimediaServiceProtocol {
         let nextIndex = (currentIndex + 1) % playlist.count
         let nextItem = playlist[nextIndex]
         
-        player.seek(to: .zero)
+        player?.seek(to: .zero)
         
-        player.replaceCurrentItem(with: nextItem)
-        player.play()
-        getTitleAudio()
-
-//        playPlayer()
+        player?.replaceCurrentItem(with: nextItem)
+       
+        playPlayer()
     }
     
     func playPreviousAudio() {
-        guard let currentItem = player.currentItem else {
+        guard let currentItem = player?.currentItem else {
             return
         }
         guard let currentIndex = playlist.firstIndex(of: currentItem) else {
@@ -131,28 +140,24 @@ extension MultimediaService: MultimediaServiceProtocol {
         var previousIndex = 0
         
         currentIndex == 0 ? (previousIndex = 0) : (previousIndex = (currentIndex - 1) % playlist.count)
-        
-        
+    
         let previousItem = playlist[previousIndex]
-        player.seek(to: .zero)
+        player?.seek(to: .zero)
         
-        player.replaceCurrentItem(with: previousItem)
-        player.play()
-        getTitleAudio()
-
-//        playPlayer()
+        player?.replaceCurrentItem(with: previousItem)
+        playPlayer()
     }
     
     func stopPlayer() {
-        player.pause()
-        player.seek(to: .zero)
+        player?.pause()
+        player?.seek(to: .zero)
         delegate?.updateNameLabel(name: "")
     }
     
     func changeValueSlider(value: Float) {
         let seconds = Double(value)
         let time = CMTime(seconds: seconds, preferredTimescale: 1000)
-        player.seek(to: time)
+        player?.seek(to: time)
     }
     
 }

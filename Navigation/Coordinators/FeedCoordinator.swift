@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol FeedCoodinatorProtocol {
+    func pushInfoViewController()
+}
+
 final class FeedCoordinator {
     
     
@@ -33,7 +37,7 @@ final class FeedCoordinator {
 extension FeedCoordinator: CoordinatorProtocol {
     func start() -> UIViewController {
         let feedModel = FeedModel()
-        let feedViewModel = FeedViewModel(feedModelService: feedModel)
+        let feedViewModel = FeedViewModel(feedModelService: feedModel, coordinator: self)
         let feedViewController = FeedViewController(feedViewModel: feedViewModel)
         let navController = UINavigationController(rootViewController: feedViewController)
         navController.tabBarItem = UITabBarItem(title: "Лента", image: UIImage(systemName: "doc.richtext"), tag: 0)
@@ -41,4 +45,11 @@ extension FeedCoordinator: CoordinatorProtocol {
         return navigationController
     }
     
+}
+
+extension FeedCoordinator: FeedCoodinatorProtocol {
+    func pushInfoViewController() {
+        let infoViewController = InfoViewController()
+        navigationController.pushViewController(infoViewController, animated: true)
+    }
 }

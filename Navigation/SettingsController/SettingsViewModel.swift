@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import FirebaseAuth
 protocol SettingsViewModelProtocol: AnyObject {
     func logoutProfile()
 }
@@ -32,6 +32,7 @@ final class SettingsViewModel {
 
 extension SettingsViewModel: SettingsViewModelProtocol {
     func logoutProfile() {
+        try? Auth.auth().signOut()
         coordinator?.logoutProfile()
         
     }

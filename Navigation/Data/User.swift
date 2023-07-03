@@ -12,7 +12,6 @@ struct User {
     var userAvatar: UIImage?
     var userName: String
     var userStatus: String
-    var password: String
 }
 
 enum UserServiceError: Error {
@@ -30,9 +29,9 @@ protocol UserService {
 }
 
 internal var userData: [User] = [
-    User(userLogin: "ruslan", userAvatar: UIImage(named: "rus"), userName: "Ruslan G", userStatus: "I love iOS", password: "rusrus"),
-    User(userLogin: "kate", userAvatar: UIImage(named: "heart"), userName: "Kate G", userStatus: "I love Ruslan", password: "katekate"),
-    User(userLogin: "cat", userAvatar: UIImage(named: "cat"), userName: "Cat Lucy", userStatus: "I love sleep", password: "catcat")
+    User(userLogin: "ruslan", userAvatar: UIImage(named: "rus"), userName: "Ruslan G", userStatus: "I love iOS"),
+    User(userLogin: "kate", userAvatar: UIImage(named: "heart"), userName: "Kate G", userStatus: "I love Ruslan"),
+    User(userLogin: "cat", userAvatar: UIImage(named: "cat"), userName: "Cat Lucy", userStatus: "I love sleep")
 ]
 
 final class CurrentUserService: UserService {
@@ -57,8 +56,7 @@ final class TestUserService: UserService {
         userLogin: "cat",
         userAvatar: UIImage(named: "cat"),
         userName: "CAt Lucy",
-        userStatus: "I love Sleep",
-        password: "testcat"
+        userStatus: "I love Sleep"
     )
     
     func logInToUser(_ userLogin: String?) -> Result<User, UserServiceError> {
